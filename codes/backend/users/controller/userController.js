@@ -1,5 +1,5 @@
 // server/users/controller/userController.js
-const User = require("../model/user");
+const User = require("../models/user");
 
 exports.getUsers = async (req, res) => {
   try {
@@ -12,23 +12,13 @@ exports.getUsers = async (req, res) => {
 
 exports.addUser = async (req, res) => {
   try {
-    const {
-      userid,
-      email,
-      username,
-      password,
-      phonNumber,
-      userStatus,
-      chatId,
-    } = req.body;
+    const { email, username, password, phonNumber, userStatus } = req.body;
     const newUser = new User({
-      userid,
       email,
       username,
       password,
       phonNumber,
       userStatus,
-      chatId,
     });
     await newUser.save();
     res.status(201).json(newUser);
@@ -39,7 +29,9 @@ exports.addUser = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).populate("chatId");
+    const user = await User.findOne({ userid: req.params.id }).populate(
+      "chatId"
+    );
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
@@ -51,7 +43,7 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUserStatus = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ userid: req.params.id });
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }

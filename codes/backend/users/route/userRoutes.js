@@ -8,9 +8,9 @@ const {
   updateUserStatus,
 } = require("../controller/userController");
 
-router.get("/users", getUsers);
-router.post("/users", addUser);
-router.get("/users/:id", getUserById);
-router.put("/users/:id/status", updateUserStatus);
+router.get("/", getUsers);
+router.post("/", addUser);
+router.get("/:id", getUserById);
+router.put("/:id/status", updateUserStatus);
 
 module.exports = router;
