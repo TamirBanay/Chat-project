@@ -7,15 +7,17 @@ import Chats from "./pages/ChatsPage";
 
 function App() {
   return (
-    <AuthProvider>
-      <HashRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/chats/:userId" element={<Chats />} />
-        </Routes>
-      </HashRouter>
-    </AuthProvider>
+    <div className="App">
+      <AuthProvider>
+        <HashRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/chats/:userId" element={<Chats />} />
+          </Routes>
+        </HashRouter>
+      </AuthProvider>
+    </div>
   );
 }
 

@@ -1,0 +1,80 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.chats-main {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 25px;
+  height: 100vh;
+  box-sizing: border-box;
+  row-gap: 20px;
+}
+.chats-userNameAndImg {
+  display: flex;
+  flex-direction: row;
+}
+.chats-userNameAndImg-img {
+  align-items: center;
+  display: flex;
+}
+.chats-userNameAndImg-userName {
+  color: white;
+  align-items: center;
+  display: flex;
+  padding-left: 10px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 27px;
+  width: 187px;
+  height: 58px;
+}
+.chats-inputSearchAndAddChats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.chats-inputSearchAndAddChats-inputSearch {
+  width: 275px;
+  height: 40px;
+  position: relative;
+}
+
+.chats-inputSearchAndAddChats-inputSearch-input {
+  width: 275px;
+  height: 40px;
+
+  border-radius: 10px;
+  padding-left: 10px; /* מרווח עבור האייקון */
+  color: #94969c;
+  background-color: #1f232f;
+  border: 0px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  box-sizing: border-box;
+}
+
+.chats-inputSearchAndAddChats-inputSearch-icon {
+  position: absolute;
+  left: 235px;
+  top: 55%;
+  transform: translateY(-50%);
+}
+
+.chats-inputSearchAndAddChats-AddChats {
+  padding-right: 10px;
+}
+.chats-titleChatrooms {
+  color: white;
+  font-family: "Roboto", sans-serif;
+  text-align: start;
+  font-size: 20px;
+  height: 23px;
+  width: 23px;
+}
