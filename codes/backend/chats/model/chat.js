@@ -1,4 +1,3 @@
-// server/chats/model/chat.js
 const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
@@ -8,15 +7,13 @@ const messageSchema = new mongoose.Schema({
 });
 
 const chatSchema = new mongoose.Schema({
-  chatId: { type: Number, unique: true }, 
+  chatId: { type: Number, unique: true },
   userId1: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: Number,
     required: true,
   },
   userId2: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: Number,
     required: true,
   },
   messages: [messageSchema],

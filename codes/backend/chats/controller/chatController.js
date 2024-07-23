@@ -2,6 +2,19 @@
 const Chat = require("../model/chat");
 const User = require("../../users/models/user");
 
+exports.getChatByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const chats = await Chat.find({
+      $or: [{ userId1: userId }, { userId2: userId }],
+    });
+    res.json(chats);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
 exports.getChats = async (req, res) => {
   try {
     const chats = await Chat.find().populate("userId1 userId2");
@@ -19,27 +32,19 @@ exports.addChat = async (req, res) => {
     const user2 = await User.findOne({ userid: userId2 });
 
     if (!user1 || !user2) {
-      return res.status(404).json({ msg: "One or both users not found" });
+      return res.status(400).json({ msg: "One or both users not found" });
     }
 
-    const existingChat = await Chat.findOne({
-      $or: [
-        { userId1: user1._id, userId2: user2._id },
-        { userId1: user2._id, userId2: user1._id },
-      ],
+    const newChat = new Chat({
+      userId1: userId1,
+      userId2: userId2,
     });
-    if (existingChat) {
-      return res
-        .status(400)
-        .json({ msg: "Chat between these users already exists" });
-    }
 
-    const newChat = new Chat({ userId1: user1._id, userId2: user2._id });
     await newChat.save();
-
     res.status(201).json(newChat);
   } catch (err) {
-    res.status(500).send("Server Error");
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
 };
 
