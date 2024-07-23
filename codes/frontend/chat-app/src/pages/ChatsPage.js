@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
-import { useContext } from "react";
 
-function Chats() {
+function ChatsPage() {
   const { authData } = useContext(AuthContext);
-  const { setAuthData } = useContext(AuthContext);
-  console.log(authData);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userDetails = localStorage.getItem("user");
+    if (!authData && !userDetails) {
+      navigate("/login");
+    }
+  }, [authData, navigate]);
+
+  const user = authData?.user || JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    return <div>Loading...</div>; // או אפשר לנתב לדף התחברות אם המשתמש לא מחובר
+  }
+
   return (
     <div>
-      <h1>Hello, this is Chats! {authData.user.username}</h1>
+      <h1>Hello, this is Chats! {user.username}</h1>
     </div>
   );
 }
 
-export default Chats;
+export default ChatsPage;
