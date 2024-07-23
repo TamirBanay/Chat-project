@@ -7,8 +7,45 @@ exports.getChatByUserId = async (req, res) => {
     const { userId } = req.params;
     const chats = await Chat.find({
       $or: [{ userId1: userId }, { userId2: userId }],
-    });
+    })
+      .populate("userId1", "username email")
+      .populate("userId2", "username email");
+
+    // מצא את פרטי המשתמש של userId2
+    for (const chat of chats) {
+      await chat.populate("userId2").execPopulate();
+    }
+
     res.json(chats);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+exports.getChatByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const chats = await Chat.find({
+      $or: [{ userId1: userId }, { userId2: userId }],
+    });
+
+    const populatedChats = await Promise.all(
+      chats.map(async (chat) => {
+        const user1 = await User.findOne({ userid: chat.userId1 }).select(
+          "username email"
+        );
+        const user2 = await User.findOne({ userid: chat.userId2 }).select(
+          "username email"
+        );
+        return {
+          ...chat.toObject(),
+          userId1Details: user1,
+          userId2Details: user2,
+        };
+      })
+    );
+
+    res.json(populatedChats);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
