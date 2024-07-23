@@ -28,6 +28,7 @@ exports.addChat = async (req, res) => {
   try {
     const { userId1, userId2 } = req.body;
 
+    // בדיקה אם המשתמשים קיימים
     const user1 = await User.findOne({ userid: userId1 });
     const user2 = await User.findOne({ userid: userId2 });
 
