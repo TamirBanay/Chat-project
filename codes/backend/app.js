@@ -1,6 +1,7 @@
-// server/app.js
+require("dotenv").config();
 const express = require("express");
 const http = require("http");
+const cors = require("cors"); // ייבוא חבילת cors
 const socketIo = require("socket.io");
 const connectDB = require("./config/db");
 const userRoutes = require("./users/route/userRoutes");
@@ -16,6 +17,7 @@ connectDB();
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use("/api/users", userRoutes);
