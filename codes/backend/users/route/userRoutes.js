@@ -11,7 +11,7 @@ const {
 const { authMiddleware } = require("../controller/userController");
 
 router.get("/", getUsers);
-router.post("/", addUser);
+router.post("/addUser", addUser);
 router.get("/:id", getUserById);
 router.put("/:id/status", updateUserStatus);
 router.post("/login", loginUser);
