@@ -93,7 +93,7 @@ exports.loginUser = async (req, res) => {
 
     const payload = {
       user: {
-        id: user.id,
+        id: user.userid,
       },
     };
 
@@ -107,7 +107,7 @@ exports.loginUser = async (req, res) => {
       res.json({
         token,
         user: {
-          id: user.id,
+          id: user.userid,
           email: user.email,
           username: user.username,
           phonNumber: user.phonNumber,
