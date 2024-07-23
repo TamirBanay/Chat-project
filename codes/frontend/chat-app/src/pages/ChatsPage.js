@@ -1,16 +1,12 @@
-import React from "react";
-import AuthContext from "../context/AuthContext";
-import { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
-function Chats() {
-  const { authData } = useContext(AuthContext);
-  const { setAuthData } = useContext(AuthContext);
-  console.log(authData);
+import Chats from "../components/chats/Chats";
+function ChatsPage() {
   return (
     <div>
-      <h1>Hello, this is Chats! {authData.user.username}</h1>
+      <Chats />
     </div>
   );
 }
 
-export default Chats;
+export default ChatsPage;

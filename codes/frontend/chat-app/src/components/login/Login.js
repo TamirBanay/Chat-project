@@ -6,8 +6,6 @@ import axios from "axios";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { authData } = useContext(AuthContext);
-
   const { setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -19,7 +17,8 @@ const LoginPage = () => {
         { email, password }
       );
       setAuthData(response.data);
-      navigate(`/chats/${response.data.user.id}`); // נווט עם ה-id מהתגובה
+      localStorage.setItem("user", JSON.stringify(response.data.user)); // המרה למחרוזת JSON
+      navigate(`/chats/${response.data.user.id}`);
     } catch (err) {
       console.error(err);
       alert("Login failed");
