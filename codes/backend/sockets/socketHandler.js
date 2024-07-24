@@ -18,12 +18,8 @@ const socketHandler = (io) => {
       );
 
       try {
-        console.log("Finding chat:", chatId);
         const chat = await Chat.findOne({ chatId: Number(chatId) });
-        console.log("Chat found:", chat);
-
         if (!chat) {
-          console.log("Chat not found");
           socket.emit("error", "Chat not found");
           return;
         }
@@ -33,7 +29,6 @@ const socketHandler = (io) => {
         await chat.save();
 
         io.to(chatId).emit("receiveMessage", newMessage);
-        console.log(`Message sent: ${message}`);
       } catch (err) {
         console.error("Error handling message:", err);
         socket.emit("error", "Server error");
