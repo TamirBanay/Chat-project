@@ -1,30 +1,29 @@
-// frontend/chat-app/src/components/conversation/Conversation.js
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { useParams } from "react-router-dom";
-import "./Conversation.css";
+
 const socket = io("http://localhost:4000");
 
 const Conversation = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [user1, setUser1] = useState("");
+  const [user2, setUser2] = useState("");
   const { chatId } = useParams();
 
   useEffect(() => {
-    // Join the chat room
     socket.emit("joinChat", chatId);
 
-    // Fetch the chat history when joining
-    socket.on("chatHistory", (history) => {
-      setMessages(history);
+    socket.on("chatHistory", (data) => {
+      setMessages(data.messages);
+      setUser1(data.user1);
+      setUser2(data.user2);
     });
 
-    // Listen for incoming messages
     socket.on("receiveMessage", (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
-    // Cleanup on component unmount
     return () => {
       socket.emit("leaveChat", chatId);
       socket.off("receiveMessage");
@@ -33,33 +32,27 @@ const Conversation = () => {
   }, [chatId]);
 
   const handleSendMessage = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user ? user.id : null;
-
-    if (userId) {
-      socket.emit("sendMessage", { chatId, message: newMessage, userId });
-      setNewMessage("");
-    } else {
-      console.error("User ID not found in localStorage");
-    }
+    const userId = JSON.parse(localStorage.getItem("user")).id;
+    socket.emit("sendMessage", { chatId, message: newMessage, userId });
+    setNewMessage("");
   };
-  console.log(messages);
+
   return (
     <div className="conversation-main">
-      <div className="Conversation-profileImgs-and-usernames"></div>
+      <div className="Conversation-profileImgs-and-usernames">
+        <span>{user1}</span> & <span>{user2}</span>
+      </div>
       <div>
         {messages.map((msg, index) => (
           <div key={index}>
-            <strong>{msg.userId}</strong>: {msg.message}
+            <strong>{msg.username}</strong>: {msg.message}
           </div>
         ))}
       </div>
       <input
-        className="conversation-input"
         type="text"
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="Type your message..."
       />
       <button onClick={handleSendMessage}>Send</button>
     </div>

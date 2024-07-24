@@ -1,6 +1,7 @@
 // server/sockets/socketHandler.js
 const Chat = require("../chats/model/chat");
-const mongoose = require("mongoose");
+const User = require("../users/models/user");
+
 const socketHandler = (io) => {
   io.on("connection", (socket) => {
     console.log("New client connected");
@@ -9,15 +10,29 @@ const socketHandler = (io) => {
       socket.join(chatId);
       console.log(`Client joined chat ${chatId}`);
 
-      // Fetch chat history and send to the client
       try {
-        const chat = await Chat.findOne({ chatId: Number(chatId) }).populate({
-          path: "chatId",
-          select: "username",
-        });
+        const chat = await Chat.findOne({ chatId: Number(chatId) });
 
         if (chat) {
-          socket.emit("chatHistory", chat.messages);
+          // מצא את שמות המשתמשים עבור userId1 ו- userId2
+          const user1 = await User.findOne({ userid: chat.userId1 });
+          const user2 = await User.findOne({ userid: chat.userId2 });
+
+          const chatData = {
+            user1: user1 ? user1.username : "Unknown",
+            user2: user2 ? user2.username : "Unknown",
+            messages: await Promise.all(
+              chat.messages.map(async (msg) => {
+                const user = await User.findOne({ userid: msg.userId });
+                return {
+                  ...msg.toObject(),
+                  username: user ? user.username : "Unknown",
+                };
+              })
+            ),
+          };
+
+          socket.emit("chatHistory", chatData);
         } else {
           console.log("Chat not found for chatId:", chatId);
         }
@@ -45,14 +60,13 @@ const socketHandler = (io) => {
         chat.messages.push(newMessage);
         await chat.save();
 
-        // Emit the new message with user information
-        const populatedMessage = await chat
-          .populate("messages.userId", "username")
-          .execPopulate();
-        io.to(chatId).emit(
-          "receiveMessage",
-          populatedMessage.messages.slice(-1)[0]
-        );
+        const user = await User.findOne({ userid: userId });
+        const messageWithUsername = {
+          ...newMessage,
+          username: user ? user.username : "Unknown",
+        };
+
+        io.to(chatId).emit("receiveMessage", messageWithUsername);
 
         console.log(`Message sent: ${message}`);
       } catch (err) {
