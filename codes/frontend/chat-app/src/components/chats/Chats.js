@@ -7,19 +7,22 @@ import serchIcon from "../images/searchicon.png";
 import addButton from "../images/addButton.png";
 import Avatar from "../images/Avatar.png";
 import axios from "axios";
+import Conversation from "../conversation/Conversation";
 
 function Chats() {
   const { authData } = useContext(AuthContext);
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("user"));
+  const [activeChatId, setActiveChatId] = useState(null);
+  const [chatIsOpen, setChatIsOpen] = useState(false);
+
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();
 
     const options = { weekday: "short" };
 
-    // בדיקה אם ההודעה מהיום
     if (date.toDateString() === now.toDateString()) {
       return date.toLocaleTimeString([], {
         hour: "2-digit",
@@ -33,7 +36,6 @@ function Chats() {
       return date.toLocaleDateString("en-US", options);
     }
 
-    // בדיקה אם ההודעה מלפני יומיים
     const twoDaysAgo = new Date(now);
     twoDaysAgo.setDate(now.getDate() - 2);
     if (date.toDateString() === twoDaysAgo.toDateString()) {
@@ -80,6 +82,11 @@ function Chats() {
     return <div>Loading...</div>;
   }
 
+  const handleChatClick = (chatId) => {
+    setActiveChatId(chatId);
+    console.log(activeChatId);
+    setChatIsOpen(!chatIsOpen);
+  };
   return (
     <div className="chats-main">
       <div className="chats-userNameAndImg">
@@ -110,7 +117,11 @@ function Chats() {
         {chats
           .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // מיון לפי תאריך ושעה
           .map((chat) => (
-            <div key={chat._id} className="chats-chatsList">
+            <div
+              key={chat._id}
+              className="chats-chatsList"
+              onClick={() => handleChatClick(chat.chatId)}
+            >
               <div className="chats-chatsList-img">
                 <img
                   className="chats-chatsList-img-img"
@@ -123,7 +134,9 @@ function Chats() {
                   {capitalizeFirstLetter(chat.userId2Details.username)}
                 </div>
                 <div className="chats-chatsList-lastText">
-                  Will do, super, thank yous
+                  {chat.messages.length > 0
+                    ? chat.messages[chat.messages.length - 1].message
+                    : ""}
                 </div>
               </div>
               <div className="chats-chatsList-time">
@@ -131,6 +144,7 @@ function Chats() {
               </div>
             </div>
           ))}
+        {chatIsOpen ? <Conversation chatId={activeChatId} /> : ""}
       </div>
     </div>
   );
