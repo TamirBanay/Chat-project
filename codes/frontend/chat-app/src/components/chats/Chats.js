@@ -7,7 +7,6 @@ import serchIcon from "../images/searchicon.png";
 import addButton from "../images/addButton.png";
 import Avatar from "../images/Avatar.png";
 import axios from "axios";
-import Conversation from "../conversation/Conversation";
 
 function Chats() {
   const { authData } = useContext(AuthContext);
@@ -15,7 +14,6 @@ function Chats() {
   const [chats, setChats] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const [activeChatId, setActiveChatId] = useState(null);
-  const [chatIsOpen, setChatIsOpen] = useState(false);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -84,8 +82,7 @@ function Chats() {
 
   const handleChatClick = (chatId) => {
     setActiveChatId(chatId);
-    console.log(activeChatId);
-    setChatIsOpen(!chatIsOpen);
+    navigate(`/chats/${userDetails.id}/${chatId}`);
   };
   return (
     <div className="chats-main">
@@ -144,7 +141,6 @@ function Chats() {
               </div>
             </div>
           ))}
-        {chatIsOpen ? <Conversation chatId={activeChatId} /> : ""}
       </div>
     </div>
   );
