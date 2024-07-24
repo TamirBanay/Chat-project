@@ -112,7 +112,7 @@ function Chats() {
       <div className="chats-storyImages"></div>
       <div className="chats-chatsList-main">
         {chats
-          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // מיון לפי תאריך ושעה
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) 
           .map((chat) => (
             <div
               key={chat._id}
