@@ -14,7 +14,6 @@ function Chats() {
   const [chats, setChats] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const [activeChatId, setActiveChatId] = useState(null);
-
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -112,7 +111,7 @@ function Chats() {
       <div className="chats-storyImages"></div>
       <div className="chats-chatsList-main">
         {chats
-          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // מיון לפי תאריך ושעה
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
           .map((chat) => (
             <div
               key={chat._id}
