@@ -32,10 +32,10 @@ exports.getChatByUserId = async (req, res) => {
     const populatedChats = await Promise.all(
       chats.map(async (chat) => {
         const user1 = await User.findOne({ userid: chat.userId1 }).select(
-          "username email"
+          "username email gender"
         );
         const user2 = await User.findOne({ userid: chat.userId2 }).select(
-          "username email"
+          "username email gender"
         );
         return {
           ...chat.toObject(),
@@ -65,7 +65,6 @@ exports.addChat = async (req, res) => {
   try {
     const { userId1, userId2 } = req.body;
 
-    // בדיקה אם המשתמשים קיימים
     const user1 = await User.findOne({ userid: userId1 });
     const user2 = await User.findOne({ userid: userId2 });
 

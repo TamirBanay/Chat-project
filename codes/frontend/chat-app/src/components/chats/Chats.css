@@ -17,10 +17,13 @@ body {
 .chats-userNameAndImg {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 .chats-userNameAndImg-img {
   align-items: center;
   display: flex;
+  width: 44px;
+  height: 44px;
 }
 .chats-userNameAndImg-userName {
   color: white;
