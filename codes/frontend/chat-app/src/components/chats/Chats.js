@@ -14,10 +14,39 @@ function Chats() {
   const [chats, setChats] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const [activeChatId, setActiveChatId] = useState(null);
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+
+  const handleCreateChat = () => {
+    const userIdPhoneNumber1 = userDetails.phonNumber; // ודא ששדה זה קיים ומוחזר נכון מהשרת
+    console.log(userIdPhoneNumber1);
+
+    const userIdPhoneNumber2 = prompt(
+      "Enter the phone number to create a chat with:"
+    );
+
+    if (userIdPhoneNumber2) {
+      axios
+        .post("http://localhost:4000/api/chats/addChatByPhoneNumber", {
+          userIdPhoneNumber1,
+          userIdPhoneNumber2,
+        })
+        .then((response) => {
+          console.log("Chat created:", response.data); // הסר את JSON.parse
+          navigate(`/chats/${userDetails.id}/${response.data.chatId}`);
+        })
+        .catch((error) => {
+          console.error(
+            "Error creating chat:",
+            error.response ? error.response.data : error.message
+          );
+          alert("Failed to create chat. Please try again.");
+        });
+    }
+  };
+
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();
-
     const options = { weekday: "short" };
 
     if (date.toDateString() === now.toDateString()) {
@@ -103,7 +132,10 @@ function Chats() {
             <img src={serchIcon} alt="Search" />
           </div>
         </div>
-        <div className="chats-inputSearchAndAddChats-AddChats">
+        <div
+          className="chats-inputSearchAndAddChats-AddChats"
+          onClick={handleCreateChat}
+        >
           <img src={addButton} alt="Add" />
         </div>
       </div>
