@@ -86,6 +86,46 @@ exports.addChat = async (req, res) => {
   }
 };
 
+exports.addChatByPhoneNumber = async (req, res) => {
+  try {
+    const { userIdPhoneNumber1, userIdPhoneNumber2 } = req.body;
+
+    // בדיקה אם המשתמשים קיימים
+    const user1 = await User.findOne({ phonNumber: userIdPhoneNumber1 });
+    const user2 = await User.findOne({ phonNumber: userIdPhoneNumber2 });
+
+    if (!user1 || !user2) {
+      return res.status(400).json({ msg: "One or both users not found" });
+    }
+
+    // בדיקה אם קיים צ'אט בין המשתמשים
+    const existingChat = await Chat.findOne({
+      $or: [
+        { userId1: user1.userid, userId2: user2.userid },
+        { userId1: user2.userid, userId2: user1.userid },
+      ],
+    });
+
+    if (existingChat) {
+      return res
+        .status(400)
+        .json({ msg: "Chat between these users already exists" });
+    }
+
+    const newChat = new Chat({
+      userId1: user1.userid,
+      userId2: user2.userid,
+      chatId: new Date().getTime(),
+    });
+
+    await newChat.save();
+    res.status(201).json(newChat);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
 exports.getChatById = async (req, res) => {
   try {
     const chat = await Chat.findById(req.params.id).populate("userId1 userId2");

@@ -12,12 +12,40 @@ function Chats() {
   const { authData } = useContext(AuthContext);
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredChats, setFilteredChats] = useState([]);
+
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const [activeChatId, setActiveChatId] = useState(null);
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const handleCreateChatByPhoneNumber = () => {
+    const userIdPhoneNumber1 = userDetails.phonNumber;
+    const userIdPhoneNumber2 = prompt(
+      "Enter the phone number to create a chat with:"
+    );
+    if (userIdPhoneNumber2) {
+      axios
+        .post("http://localhost:4000/api/chats/addChatByPhoneNumber", {
+          userIdPhoneNumber1,
+          userIdPhoneNumber2,
+        })
+        .then((response) => {
+          console.log("Chat created:", response.data); // הסר את JSON.parse
+          navigate(`/chats/${userDetails.id}/${response.data.chatId}`);
+        })
+        .catch((error) => {
+          console.error(
+            "Error creating chat:",
+            error.response ? error.response.data : error.message
+          );
+          alert("Failed to create chat. Please try again.");
+        });
+    }
+  };
+
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();
-
     const options = { weekday: "short" };
 
     if (date.toDateString() === now.toDateString()) {
@@ -54,9 +82,30 @@ function Chats() {
         `http://localhost:4000/api/chats/getChatByUserId/${userDetails.id}`
       );
       setChats(response.data);
+      setFilteredChats(response.data); // הצג את כל השיחות בהתחלה
     } catch (error) {
       console.error("Error fetching chats:", error.message);
     }
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchQuery, chats]);
+
+  const handleSearch = () => {
+    const filtered = chats.filter(
+      (chat) =>
+        chat.messages.some((message) =>
+          message.message.toLowerCase().includes(searchQuery.toLowerCase())
+        ) ||
+        chat.userId1Details.username
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        chat.userId2Details.username
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+    );
+    setFilteredChats(filtered);
   };
 
   useEffect(() => {
@@ -96,21 +145,27 @@ function Chats() {
       <div className="chats-inputSearchAndAddChats">
         <div className="chats-inputSearchAndAddChats-inputSearch">
           <input
+            type="text"
             className="chats-inputSearchAndAddChats-inputSearch-input"
             placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <div className="chats-inputSearchAndAddChats-inputSearch-icon">
             <img src={serchIcon} alt="Search" />
           </div>
         </div>
-        <div className="chats-inputSearchAndAddChats-AddChats">
+        <div
+          className="chats-inputSearchAndAddChats-AddChats"
+          onClick={handleCreateChatByPhoneNumber}
+        >
           <img src={addButton} alt="Add" />
         </div>
       </div>
       <div className="chats-titleChatrooms">Chatrooms</div>
       <div className="chats-storyImages"></div>
       <div className="chats-chatsList-main">
-        {chats
+        {filteredChats
           .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
           .map((chat) => (
             <div

@@ -26,6 +26,9 @@ body {
 }
 .conversation-profileImgs-and-usernames-usernames {
   text-align: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .conversation-img {
   width: 40px;
@@ -39,15 +42,11 @@ body {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
 }
-.conversation-names {
-  color: white;
-  font-size: 15px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-}
+
 .conversation-all-massage-container {
   max-height: 80%;
   overflow-y: scroll;
+  margin-top: auto;
 }
 .conversation-massage {
   display: flex;
@@ -102,8 +101,8 @@ body {
   color: white;
   box-sizing: border-box;
   display: flex;
-  resize: none; 
-  overflow: hidden; 
+  resize: none;
+  overflow: hidden;
 }
 
 .conversation-sendIconImg {
