@@ -16,7 +16,7 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.addUser = async (req, res) => {
-  const { email, username, password, phonNumber } = req.body;
+  const { email, username, password, phonNumber, gender } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -29,6 +29,7 @@ exports.addUser = async (req, res) => {
       username,
       password,
       phonNumber,
+      gender,
     });
 
     const salt = await bcrypt.genSalt(10);

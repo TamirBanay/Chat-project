@@ -13,14 +13,19 @@ const userSchema = new mongoose.Schema({
     enum: ["Connected", "disConnected"],
     default: "disConnected",
   },
+  gender: {
+    type: String,
+    enum: ["female", "male", "else"],
+    default: "else",
+  },
   chatId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
 });
 
 userSchema.plugin(AutoIncrement, { inc_field: "userid" });
 
-userSchema.index({ email: 1 }, { unique: true }); // Ensure the unique index on email
+userSchema.index({ email: 1 }, { unique: true }); 
 
 const User = mongoose.model("User", userSchema);
-User.ensureIndexes(); // Ensure indexes are created
+User.ensureIndexes(); 
 
 module.exports = User;
