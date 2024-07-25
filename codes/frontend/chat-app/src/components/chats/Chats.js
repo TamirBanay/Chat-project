@@ -12,18 +12,17 @@ function Chats() {
   const { authData } = useContext(AuthContext);
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredChats, setFilteredChats] = useState([]);
+
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const [activeChatId, setActiveChatId] = useState(null);
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
-
-  const handleCreateChat = () => {
-    const userIdPhoneNumber1 = userDetails.phonNumber; // ודא ששדה זה קיים ומוחזר נכון מהשרת
-    console.log(userIdPhoneNumber1);
-
+  const handleCreateChatByPhoneNumber = () => {
+    const userIdPhoneNumber1 = userDetails.phonNumber;
     const userIdPhoneNumber2 = prompt(
       "Enter the phone number to create a chat with:"
     );
-
     if (userIdPhoneNumber2) {
       axios
         .post("http://localhost:4000/api/chats/addChatByPhoneNumber", {
@@ -83,9 +82,30 @@ function Chats() {
         `http://localhost:4000/api/chats/getChatByUserId/${userDetails.id}`
       );
       setChats(response.data);
+      setFilteredChats(response.data); // הצג את כל השיחות בהתחלה
     } catch (error) {
       console.error("Error fetching chats:", error.message);
     }
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchQuery, chats]);
+
+  const handleSearch = () => {
+    const filtered = chats.filter(
+      (chat) =>
+        chat.messages.some((message) =>
+          message.message.toLowerCase().includes(searchQuery.toLowerCase())
+        ) ||
+        chat.userId1Details.username
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        chat.userId2Details.username
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+    );
+    setFilteredChats(filtered);
   };
 
   useEffect(() => {
@@ -125,8 +145,11 @@ function Chats() {
       <div className="chats-inputSearchAndAddChats">
         <div className="chats-inputSearchAndAddChats-inputSearch">
           <input
+            type="text"
             className="chats-inputSearchAndAddChats-inputSearch-input"
             placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <div className="chats-inputSearchAndAddChats-inputSearch-icon">
             <img src={serchIcon} alt="Search" />
@@ -134,7 +157,7 @@ function Chats() {
         </div>
         <div
           className="chats-inputSearchAndAddChats-AddChats"
-          onClick={handleCreateChat}
+          onClick={handleCreateChatByPhoneNumber}
         >
           <img src={addButton} alt="Add" />
         </div>
@@ -142,7 +165,7 @@ function Chats() {
       <div className="chats-titleChatrooms">Chatrooms</div>
       <div className="chats-storyImages"></div>
       <div className="chats-chatsList-main">
-        {chats
+        {filteredChats
           .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
           .map((chat) => (
             <div
