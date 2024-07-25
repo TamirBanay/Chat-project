@@ -18,7 +18,7 @@ const Conversation = () => {
   const { chatId, userId } = useParams();
   const [stream, setStream] = useState(null);
   const textAreaRef = useRef(null);
-  const messagesEndRef = useRef(null); 
+  const messagesEndRef = useRef(null);
   useEffect(() => {
     socket.emit("joinChat", chatId);
 
@@ -44,7 +44,7 @@ const Conversation = () => {
     socket.emit("sendMessage", { chatId, message: newMessage, userId });
     setNewMessage("");
   };
-  
+
   const handleTextAreaChange = (e) => {
     setNewMessage(e.target.value);
     autoResizeTextArea(e.target);

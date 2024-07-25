@@ -102,6 +102,8 @@ body {
   color: white;
   box-sizing: border-box;
   display: flex;
+  resize: none; 
+  overflow: hidden; 
 }
 
 .conversation-sendIconImg {
