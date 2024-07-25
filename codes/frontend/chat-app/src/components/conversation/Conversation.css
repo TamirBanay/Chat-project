@@ -90,28 +90,25 @@ body {
 }
 
 .conversation-input {
-  width: 275px;
-  height: 40px;
+  min-width: 275px;
+  width: fit-content;
+  min-height: 40px;
+  height: fit-content;
   border-radius: 12px;
   padding-left: 10px;
+  padding-top: 10px;
   background-color: #1f232f;
   border: none;
   color: white;
   box-sizing: border-box;
+  display: flex;
 }
 
 .conversation-sendIconImg {
   position: absolute;
   right: 20px;
   bottom: 20%;
-
-  /* transform: translateY(-50%); */
-  /* cursor: pointer; */
   transform: translateX(-100%);
-
-  /* background-color: none; */
-  /* border: none; */
-  /* padding: 0; */
 }
 .conversation-cameraIcons {
   position: relative;

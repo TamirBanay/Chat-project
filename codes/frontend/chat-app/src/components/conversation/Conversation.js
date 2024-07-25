@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import { useParams } from "react-router-dom";
 import appImg from "../images/appImg.png";
@@ -16,7 +16,9 @@ const Conversation = () => {
   const [user1, setUser1] = useState("");
   const [user2, setUser2] = useState("");
   const { chatId, userId } = useParams();
-  console.log(userId);
+  const [stream, setStream] = useState(null);
+  const textAreaRef = useRef(null);
+  const messagesEndRef = useRef(null); 
   useEffect(() => {
     socket.emit("joinChat", chatId);
 
@@ -42,7 +44,22 @@ const Conversation = () => {
     socket.emit("sendMessage", { chatId, message: newMessage, userId });
     setNewMessage("");
   };
-  console.log(messages);
+  
+  const handleTextAreaChange = (e) => {
+    setNewMessage(e.target.value);
+    autoResizeTextArea(e.target);
+  };
+
+  const autoResizeTextArea = (element) => {
+    element.style.height = "auto";
+    element.style.height = element.scrollHeight + "px";
+  };
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   return (
     <div className="conversation-main">
       <div className="conversation-profileImgs-and-usernames">
@@ -71,23 +88,46 @@ const Conversation = () => {
             )}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className="conversation-input-and-cameraIcon">
-        <input
+        <textarea
+          ref={textAreaRef}
           className="conversation-input"
-          type="text"
           value={newMessage}
           placeholder="Write"
-          onChange={(e) => setNewMessage(e.target.value)}
+          onChange={handleTextAreaChange}
+          rows="1"
         />
         <button className="conversation-button" onClick={handleSendMessage}>
           <img className="conversation-sendIconImg" src={sendIcon} />
         </button>
         <div className="conversation-cameraIcons">
-          <img className="conversation-backgroundIcon" src={backgroundIcon} />
-          <img className="conversation-camera" src={cameraIcon} />
+          <img
+            className="conversation-backgroundIcon"
+            src={backgroundIcon}
+            alt="Open Camera"
+          />
+          <img
+            className="conversation-camera"
+            src={cameraIcon}
+            alt="Take Photo"
+          />
         </div>
       </div>
+      <video
+        id="videoElement"
+        width="400"
+        height="300"
+        style={{ display: "none" }}
+        autoPlay
+      ></video>
+      <canvas
+        id="canvasElement"
+        width="400"
+        height="300"
+        style={{ display: "none" }}
+      ></canvas>
     </div>
   );
 };
