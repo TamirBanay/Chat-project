@@ -14,7 +14,6 @@ function Chats() {
   const [chats, setChats] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredChats, setFilteredChats] = useState([]);
-
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const [activeChatId, setActiveChatId] = useState(null);
   const [newPhoneNumber, setNewPhoneNumber] = useState("");

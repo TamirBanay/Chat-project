@@ -17,6 +17,7 @@ const LoginPage = () => {
         { email, password }
       );
       setAuthData(response.data);
+      console.log(response.data);
       localStorage.setItem("user", JSON.stringify(response.data.user)); // המרה למחרוזת JSON
       navigate(`/chats/${response.data.user.id}`);
     } catch (err) {

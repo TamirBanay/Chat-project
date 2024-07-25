@@ -113,6 +113,7 @@ exports.loginUser = async (req, res) => {
           username: user.username,
           phonNumber: user.phonNumber,
           userStatus: user.userStatus,
+          gender: user.gender,
         },
       });
     });
