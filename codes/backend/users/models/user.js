@@ -15,8 +15,8 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ["female", "male", "else"],
-    default: "else",
+    enum: ["female", "male", "other"],
+    default: "other",
   },
   chatId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
 });

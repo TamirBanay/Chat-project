@@ -7,6 +7,7 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [phonNumber, setPhonNumber] = useState("");
+  const [gender, setGender] = useState(""); // הוספת משתנה למין
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -19,6 +20,7 @@ const Signup = () => {
           username,
           password,
           phonNumber,
+          gender, // הוספת המין למידע הנשלח לשרת
         }
       );
       alert("Signup successful!");
@@ -67,6 +69,42 @@ const Signup = () => {
           onChange={(e) => setPhonNumber(e.target.value)}
           required
         />
+      </div>
+      <div>
+        <label>Gender</label>
+        <div>
+          <input
+            type="radio"
+            id="male"
+            name="gender"
+            value="male"
+            checked={gender === "male"}
+            onChange={(e) => setGender(e.target.value)}
+          />
+          <label htmlFor="male">Male</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="female"
+            name="gender"
+            value="female"
+            checked={gender === "female"}
+            onChange={(e) => setGender(e.target.value)}
+          />
+          <label htmlFor="female">Female</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="other"
+            name="gender"
+            value="other"
+            checked={gender === "other"}
+            onChange={(e) => setGender(e.target.value)}
+          />
+          <label htmlFor="other">Other</label>
+        </div>
       </div>
       <button type="submit">Signup</button>
     </form>
