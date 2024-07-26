@@ -8,8 +8,8 @@ exports.getChatByUserId = async (req, res) => {
     const chats = await Chat.find({
       $or: [{ userId1: userId }, { userId2: userId }],
     })
-      .populate("userId1", "username email")
-      .populate("userId2", "username email");
+      .populate("userId1", "username email profileImage")
+      .populate("userId2", "username email profileImage");
 
     // מצא את פרטי המשתמש של userId2
     for (const chat of chats) {
@@ -32,10 +32,10 @@ exports.getChatByUserId = async (req, res) => {
     const populatedChats = await Promise.all(
       chats.map(async (chat) => {
         const user1 = await User.findOne({ userid: chat.userId1 }).select(
-          "username email"
+          "username email profileImage"
         );
         const user2 = await User.findOne({ userid: chat.userId2 }).select(
-          "username email"
+          "username email profileImage"
         );
         return {
           ...chat.toObject(),
@@ -90,7 +90,6 @@ exports.addChatByPhoneNumber = async (req, res) => {
   try {
     const { userIdPhoneNumber1, userIdPhoneNumber2 } = req.body;
 
-    // בדיקה אם המשתמשים קיימים
     const user1 = await User.findOne({ phonNumber: userIdPhoneNumber1 });
     const user2 = await User.findOne({ phonNumber: userIdPhoneNumber2 });
 
@@ -98,7 +97,6 @@ exports.addChatByPhoneNumber = async (req, res) => {
       return res.status(400).json({ msg: "One or both users not found" });
     }
 
-    // בדיקה אם קיים צ'אט בין המשתמשים
     const existingChat = await Chat.findOne({
       $or: [
         { userId1: user1.userid, userId2: user2.userid },

@@ -22,6 +22,12 @@ body {
   align-items: center;
   display: flex;
 }
+.chats-userNameAndImg-img img {
+  align-items: center;
+  display: flex;
+  width: 45px;
+  height: 45px;
+}
 .chats-userNameAndImg-userName {
   color: white;
   align-items: center;

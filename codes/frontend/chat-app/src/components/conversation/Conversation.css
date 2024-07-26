@@ -30,6 +30,11 @@ body {
   flex-direction: column;
   justify-content: space-between;
 }
+.conversation-back-button {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
 .conversation-img {
   width: 40px;
   height: 40px;

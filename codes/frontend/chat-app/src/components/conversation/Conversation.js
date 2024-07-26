@@ -7,10 +7,21 @@ import "./Conversation.css";
 import sendIcon from "../images/sendIcon.png";
 import backgroundIcon from "../images/backgroundIcon.png";
 import cameraIcon from "../images/cameraIcon.png";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
+import { useNavigate } from "react-router-dom";
 
+import { _theCurrentChat } from "../../services/atom";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const socket = io("http://localhost:4000");
-
 const Conversation = () => {
+  const navigate = useNavigate();
+
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [user1, setUser1] = useState("");
@@ -19,9 +30,14 @@ const Conversation = () => {
   const [stream, setStream] = useState(null);
   const textAreaRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
+  const storedChat = JSON.parse(localStorage.getItem("theCurrentChat")) || {};
+
+  const user1ProfileImage = storedChat?.userId1Details?.profileImage || "";
+  const user2ProfileImage = storedChat?.userId2Details?.profileImage || "";
+
   useEffect(() => {
     socket.emit("joinChat", chatId);
-
     socket.on("chatHistory", (data) => {
       setMessages(data.messages);
       setUser1(data.user1);
@@ -60,17 +76,31 @@ const Conversation = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  const handleBackClick = () => {
+    navigate(-1);
+  };
   return (
     <div className="conversation-main">
       <div className="conversation-profileImgs-and-usernames">
+        <div className="conversation-back-button" onClick={handleBackClick}>
+          <ArrowForwardIosIcon sx={{ color: "#fff" }} />
+        </div>
         <div className="conversation-profileImgs-and-usernames-usernames">
           <div className="conversation-names">{user1}</div>
           <div className="conversation-names">{user2}</div>
         </div>
 
         <div className="conversation-profileImgs-and-usernames-imgs">
-          <img className="conversation-img" src={appImg} />
-          <img className="conversation-img" src={Avatar} />
+          <img
+            className="conversation-img"
+            src={storedChat?.userId1Details?.profileImage || ""}
+            alt="User 1"
+          />
+          <img
+            className="conversation-img"
+            src={storedChat?.userId2Details?.profileImage || ""}
+            alt="User 2"
+          />
         </div>
       </div>
       <div className="conversation-all-massage-container">

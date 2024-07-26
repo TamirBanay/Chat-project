@@ -1,9 +1,37 @@
-const User = require("../models/user"); // ודא שהנתיב נכון
+const User = require("../models/user");
+const path = require("path");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
 const secret = process.env.JWT_SECRET;
+
+const maleImages = [
+  "https://cdn-icons-png.flaticon.com/128/4140/4140048.png",
+  "https://cdn-icons-png.flaticon.com/128/4140/4140037.png",
+  "https://cdn-icons-png.flaticon.com/128/16683/16683419.png",
+  "https://cdn-icons-png.flaticon.com/128/4139/4139981.png",
+  "https://cdn-icons-png.flaticon.com/128/3001/3001764.png",
+];
+
+const femaleImages = [
+  "https://cdn-icons-png.flaticon.com/128/4140/4140047.png",
+  "https://cdn-icons-png.flaticon.com/128/16683/16683451.png",
+  "https://cdn-icons-png.flaticon.com/128/2922/2922561.png",
+  "https://cdn-icons-png.flaticon.com/128/4140/4140051.png",
+  "https://cdn-icons-png.flaticon.com/128/11107/11107521.png",
+];
+
+const otherImages = [
+  "https://cdn-icons-png.flaticon.com/128/4202/4202831.png",
+  "https://cdn-icons-png.flaticon.com/128/17051/17051684.png",
+  "https://cdn-icons-png.flaticon.com/128/4202/4202848.png",
+  "https://cdn-icons-png.flaticon.com/128/2922/2922510.png",
+];
+
+function getRandomImage(images) {
+  return images[Math.floor(Math.random() * images.length)];
+}
 
 exports.getUsers = async (req, res) => {
   try {
@@ -24,12 +52,26 @@ exports.addUser = async (req, res) => {
       return res.status(400).json({ msg: "User already exists" });
     }
 
+    // קביעת תמונת הפרופיל בהתאם ל-gender
+    let profileImage;
+    switch (gender) {
+      case "male":
+        profileImage = getRandomImage(maleImages);
+        break;
+      case "female":
+        profileImage = getRandomImage(femaleImages);
+        break;
+      default:
+        profileImage = getRandomImage(otherImages);
+    }
+
     user = new User({
       email,
       username,
       password,
       phonNumber,
       gender,
+      profileImage,
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -114,6 +156,7 @@ exports.loginUser = async (req, res) => {
           phonNumber: user.phonNumber,
           userStatus: user.userStatus,
           gender: user.gender,
+          profileImage: user.profileImage,
         },
       });
     });
