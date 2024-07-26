@@ -90,7 +90,7 @@ function Chats() {
         `http://localhost:4000/api/chats/getChatByUserId/${userDetails.id}`
       );
       setChats(response.data);
-      setFilteredChats(response.data); // הצג את כל השיחות בהתחלה
+      setFilteredChats(response.data); 
     } catch (error) {
       console.error("Error fetching chats:", error.message);
     }

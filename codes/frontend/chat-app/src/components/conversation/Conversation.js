@@ -14,9 +14,14 @@ import {
   useRecoilState,
   useRecoilValue,
 } from "recoil";
+import { useNavigate } from "react-router-dom";
+
 import { _theCurrentChat } from "../../services/atom";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const socket = io("http://localhost:4000");
 const Conversation = () => {
+  const navigate = useNavigate();
+
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [user1, setUser1] = useState("");
@@ -71,9 +76,15 @@ const Conversation = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  const handleBackClick = () => {
+    navigate(-1);
+  };
   return (
     <div className="conversation-main">
       <div className="conversation-profileImgs-and-usernames">
+        <div className="conversation-back-button" onClick={handleBackClick}>
+          <ArrowForwardIosIcon sx={{ color: "#fff" }} />
+        </div>
         <div className="conversation-profileImgs-and-usernames-usernames">
           <div className="conversation-names">{user1}</div>
           <div className="conversation-names">{user2}</div>
