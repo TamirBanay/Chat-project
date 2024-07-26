@@ -95,7 +95,6 @@ function Chats() {
       console.error("Error fetching chats:", error.message);
     }
   };
-  console.log(chats);
   useEffect(() => {
     handleSearch();
   }, [searchQuery, chats]);
@@ -139,10 +138,12 @@ function Chats() {
   const handleChatClick = (chatId) => {
     setActiveChatId(chatId);
     navigate(`/chats/${userDetails.id}/${chatId}`);
+
     const chat = filteredChats.find((chat) => chat.chatId === chatId);
     if (chat) {
       setSelectedChat(chat);
     }
+    localStorage.setItem("theCurrentChat", JSON.stringify(selectedChat));
   };
   return (
     <div className="chats-main">

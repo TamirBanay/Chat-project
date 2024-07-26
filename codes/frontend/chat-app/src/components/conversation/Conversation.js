@@ -16,7 +16,6 @@ import {
 } from "recoil";
 import { _theCurrentChat } from "../../services/atom";
 const socket = io("http://localhost:4000");
-
 const Conversation = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -27,12 +26,14 @@ const Conversation = () => {
   const textAreaRef = useRef(null);
   const messagesEndRef = useRef(null);
   const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
+  const storedChat = JSON.parse(localStorage.getItem("theCurrentChat")) || {};
 
-  console.log(selectedChat);
+  const user1ProfileImage = storedChat?.userId1Details?.profileImage || "";
+  const user2ProfileImage = storedChat?.userId2Details?.profileImage || "";
+
   useEffect(() => {
     socket.emit("joinChat", chatId);
     socket.on("chatHistory", (data) => {
-      console.log(data);
       setMessages(data.messages);
       setUser1(data.user1);
       setUser2(data.user2);
@@ -81,11 +82,13 @@ const Conversation = () => {
         <div className="conversation-profileImgs-and-usernames-imgs">
           <img
             className="conversation-img"
-            src={selectedChat.userId1Details.profileImage}
+            src={storedChat?.userId1Details?.profileImage || ""}
+            alt="User 1"
           />
           <img
             className="conversation-img"
-            src={selectedChat.userId2Details.profileImage}
+            src={storedChat?.userId2Details?.profileImage || ""}
+            alt="User 2"
           />
         </div>
       </div>
