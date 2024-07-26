@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 import { _theCurrentChat } from "../../services/atom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-const socket = io("http://localhost:4000");
+const socket = io(process.env.REACT_APP_SOCKET_URL || "http://localhost:4000");
 const Conversation = () => {
   const navigate = useNavigate();
 

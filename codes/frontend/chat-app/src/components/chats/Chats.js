@@ -33,10 +33,15 @@ function Chats() {
     );
     if (userIdPhoneNumber2) {
       axios
-        .post("http://localhost:4000/api/chats/addChatByPhoneNumber", {
-          userIdPhoneNumber1,
-          userIdPhoneNumber2,
-        })
+        .post(
+          `${
+            process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
+          }/api/chats/addChatByPhoneNumber`,
+          {
+            userIdPhoneNumber1,
+            userIdPhoneNumber2,
+          }
+        )
         .then((response) => {
           console.log("Chat created:", response.data);
           navigate(`/chats/${userDetails.id}/${response.data.chatId}`);
@@ -87,10 +92,12 @@ function Chats() {
   const fetchChats = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/chats/getChatByUserId/${userDetails.id}`
+        `${
+          process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
+        }/api/chats/getChatByUserId/${userDetails.id}`
       );
       setChats(response.data);
-      setFilteredChats(response.data); 
+      setFilteredChats(response.data);
     } catch (error) {
       console.error("Error fetching chats:", error.message);
     }

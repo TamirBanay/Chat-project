@@ -54,7 +54,9 @@ export default function Signup() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/users/addUser",
+        `${
+          process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
+        }/api/users/addUser`,
         {
           email,
           username,

@@ -50,7 +50,9 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/users/login",
+        `${
+          process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
+        }/api/users/login`,
         { email, password }
       );
       setAuthData(response.data);
