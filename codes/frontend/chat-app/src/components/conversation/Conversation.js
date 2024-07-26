@@ -7,7 +7,14 @@ import "./Conversation.css";
 import sendIcon from "../images/sendIcon.png";
 import backgroundIcon from "../images/backgroundIcon.png";
 import cameraIcon from "../images/cameraIcon.png";
-
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
+import { _theCurrentChat } from "../../services/atom";
 const socket = io("http://localhost:4000");
 
 const Conversation = () => {
@@ -19,10 +26,13 @@ const Conversation = () => {
   const [stream, setStream] = useState(null);
   const textAreaRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
+
+  console.log(selectedChat);
   useEffect(() => {
     socket.emit("joinChat", chatId);
-
     socket.on("chatHistory", (data) => {
+      console.log(data);
       setMessages(data.messages);
       setUser1(data.user1);
       setUser2(data.user2);
@@ -69,8 +79,14 @@ const Conversation = () => {
         </div>
 
         <div className="conversation-profileImgs-and-usernames-imgs">
-          <img className="conversation-img" src={appImg} />
-          <img className="conversation-img" src={Avatar} />
+          <img
+            className="conversation-img"
+            src={selectedChat.userId1Details.profileImage}
+          />
+          <img
+            className="conversation-img"
+            src={selectedChat.userId2Details.profileImage}
+          />
         </div>
       </div>
       <div className="conversation-all-massage-container">

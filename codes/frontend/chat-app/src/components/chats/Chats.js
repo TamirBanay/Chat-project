@@ -7,7 +7,14 @@ import serchIcon from "../images/searchicon.png";
 import addButton from "../images/addButton.png";
 import Avatar from "../images/Avatar.png";
 import axios from "axios";
-
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
+import { _theCurrentChat } from "../../services/atom";
 function Chats() {
   const { authData } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -17,7 +24,7 @@ function Chats() {
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const [activeChatId, setActiveChatId] = useState(null);
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
-
+  const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat); // משתנה לשמירת פרטי הצ'אט הנבחר
 
   const handleCreateChatByPhoneNumber = () => {
     const userIdPhoneNumber1 = userDetails.phonNumber;
@@ -31,7 +38,7 @@ function Chats() {
           userIdPhoneNumber2,
         })
         .then((response) => {
-          console.log("Chat created:", response.data); // הסר את JSON.parse
+          console.log("Chat created:", response.data);
           navigate(`/chats/${userDetails.id}/${response.data.chatId}`);
         })
         .catch((error) => {
@@ -88,7 +95,7 @@ function Chats() {
       console.error("Error fetching chats:", error.message);
     }
   };
-
+  console.log(chats);
   useEffect(() => {
     handleSearch();
   }, [searchQuery, chats]);
@@ -132,12 +139,16 @@ function Chats() {
   const handleChatClick = (chatId) => {
     setActiveChatId(chatId);
     navigate(`/chats/${userDetails.id}/${chatId}`);
+    const chat = filteredChats.find((chat) => chat.chatId === chatId);
+    if (chat) {
+      setSelectedChat(chat);
+    }
   };
   return (
     <div className="chats-main">
       <div className="chats-userNameAndImg">
         <div className="chats-userNameAndImg-img">
-          <img src={appImg} alt="User" />
+          <img src={user.profileImage} alt="User" />
         </div>
         <div className="chats-userNameAndImg-userName">
           {capitalizeFirstLetter(user.username)}
@@ -177,7 +188,7 @@ function Chats() {
               <div className="chats-chatsList-img">
                 <img
                   className="chats-chatsList-img-img"
-                  src={Avatar}
+                  src={chat.userId2Details.profileImage}
                   alt="Avatar"
                 />
               </div>

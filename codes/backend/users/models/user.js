@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
     default: "other",
   },
   chatId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
+  profileImage: { type: String }, // שדה לתמונת פרופיל
 });
 
 userSchema.plugin(AutoIncrement, { inc_field: "userid" });
