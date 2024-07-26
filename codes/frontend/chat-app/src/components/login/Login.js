@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AuthContext from "../../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import appImg from "../images/appImg.png";
+
 const defaultTheme = createTheme();
 
 function Copyright(props) {
@@ -73,7 +75,7 @@ export default function LoginPage() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            <img src={appImg} />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in

@@ -18,7 +18,7 @@ import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import axios from "axios";
-
+import appImg from "../images/appImg.png";
 function Copyright(props) {
   return (
     <Typography
@@ -84,7 +84,7 @@ export default function Signup() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            <img src={appImg} />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
