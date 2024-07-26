@@ -29,6 +29,7 @@ exports.addUser = async (req, res) => {
       username,
       password,
       phonNumber,
+      gender,
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -112,6 +113,7 @@ exports.loginUser = async (req, res) => {
           username: user.username,
           phonNumber: user.phonNumber,
           userStatus: user.userStatus,
+          gender: user.gender,
         },
       });
     });
