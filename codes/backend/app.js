@@ -22,11 +22,22 @@ const io = socketIo(server, {
 // Connect to database
 connectDB();
 
-// Middleware
-app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:3002",
+  "https://tamirbanay.github.io",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3002",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
