@@ -1,3 +1,2 @@
 build:
-  docker:
-    web:codes/backend/Dockerfile
+  docker: web:Dockerfile
