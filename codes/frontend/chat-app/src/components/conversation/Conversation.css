@@ -24,6 +24,8 @@ body {
   flex-direction: row-reverse;
   justify-content: space-between;
   width: 340px;
+  box-sizing: border-box; /* חשוב לוודא שהחישוב של הפדינג נעשה נכון */
+
 
 }
 

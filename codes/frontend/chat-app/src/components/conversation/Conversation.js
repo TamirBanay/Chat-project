@@ -95,17 +95,7 @@ const Conversation = () => {
     navigate(-1);
     localStorage.removeItem("theCurrentChat");
   };
-  window.addEventListener("resize", function () {
-    const header = document.querySelector(
-      ".conversation-profileImgs-and-usernames"
-    );
-    if (window.innerHeight < 100) {
-      // השתמש בערך שמייצג את גובה המקלדת
-      header.style.bottom = "100px"; // למשל, למקם את ה-header קצת יותר גבוה
-    } else {
-      header.style.bottom = "0";
-    }
-  });
+
 
   return (
     <div className="conversation-main">
