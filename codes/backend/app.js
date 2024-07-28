@@ -13,6 +13,7 @@ const server = http.createServer(app);
 const allowedOrigins = [
   "http://localhost:3002",
   "https://tamirbanay.github.io",
+  "https://chat-me-app-a252a6ccf758.herokuapp.com",
 ];
 
 const io = socketIo(server, {

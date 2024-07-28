@@ -55,7 +55,8 @@ export default function Signup() {
     try {
       const response = await axios.post(
         `${
-          process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
+          "https://chat-me-app-a252a6ccf758.herokuapp.com" ||
+          "http://localhost:4000"
         }/api/users/addUser`,
         {
           email,
