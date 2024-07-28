@@ -54,7 +54,7 @@ const Conversation = () => {
   window.addEventListener("resize", () => {
     const header = document.querySelector(".fixed-header");
     const newHeight = window.innerHeight;
-    header.style.height = `${120}px`;
+    header.style.height = `${newHeight}px`;
   });
 
   useEffect(() => {
