@@ -23,7 +23,7 @@ const socket = io(
 );
 const Conversation = () => {
   const navigate = useNavigate();
-
+  const [isScrolled, setIsScrolled] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [user1, setUser1] = useState("");
@@ -35,8 +35,21 @@ const Conversation = () => {
   const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
   const storedChat = JSON.parse(localStorage.getItem("theCurrentChat")) || {};
 
-  const user1ProfileImage = storedChat?.userId1Details?.profileImage || "";
-  const user2ProfileImage = storedChat?.userId2Details?.profileImage || "";
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     socket.emit("joinChat", chatId);
@@ -84,7 +97,12 @@ const Conversation = () => {
   };
   return (
     <div className="conversation-main">
-      <div className="conversation-profileImgs-and-usernames">
+      <div
+        className={`conversation-profileImgs-and-usernames ${
+          isScrolled ? "fixed-header" : ""
+        }`}
+      >
+        {" "}
         <div className="conversation-back-button" onClick={handleBackClick}>
           <ArrowForwardIosIcon sx={{ color: "#fff" }} />
         </div>
@@ -92,7 +110,6 @@ const Conversation = () => {
           <div className="conversation-names">{user1}</div>
           <div className="conversation-names">{user2}</div>
         </div>
-
         <div className="conversation-profileImgs-and-usernames-imgs">
           <img
             className="conversation-img"

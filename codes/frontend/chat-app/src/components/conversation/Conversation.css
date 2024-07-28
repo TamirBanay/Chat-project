@@ -15,6 +15,14 @@ body {
   justify-content: space-between;
   min-height: 100vh;
 }
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* או כל ערך אחר שיבטיח שהחלק יהיה מעל לשאר האלמנטים */
+}
+
 .conversation-profileImgs-and-usernames {
   display: flex;
   flex-direction: row-reverse;
