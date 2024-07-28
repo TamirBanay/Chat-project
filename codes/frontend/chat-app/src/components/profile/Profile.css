@@ -1,0 +1,74 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  /* background-color: white; */
+}
+.profile-main {
+  background-color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.profile-header {
+  height: 158px;
+  padding: 40px 20px;
+  background-color: #292f3f;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+}
+.profile-headr-title {
+  width: 48px;
+  height: 23px;
+  font-family: "Roboto", sans-serif;
+  color: white;
+}
+.profile-header-backbutton,
+.profile-header-backbutton img {
+  width: 26px;
+  height: 30px;
+}
+.profile-headr-bell,
+.profile-headr-bell img {
+  width: 19px;
+  height: 19px;
+}
+.profile-img {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 56%;
+  right: 0;
+  left: 0;
+}
+.profile-img img {
+  border: 4px solid white;
+  border-radius: 50%;
+  background-color: transparent;
+  object-fit: cover;
+}
+.profile-personalDetails {
+  display: flex;
+  flex-direction: column;
+
+  align-self: center;
+  margin-top: 85px;
+  height: 300px;
+  width: 60%;
+  gap: 10px;
+  text-align: start;
+}
+.profile-name {
+  width: fit-content;
+  height: fit-content;
+  font-family: "Roboto", sans-serif;
+  color: black;
+  width: 100%;
+}
+
+span {
+  font-weight: 500;
+}
