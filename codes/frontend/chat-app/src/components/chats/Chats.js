@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import "./Chats.css";
 import appImg from "../images/appImg.png";
 import serchIcon from "../images/searchicon.png";
 import addButton from "../images/addButton.png";
 import Avatar from "../images/Avatar.png";
+
 import axios from "axios";
 import {
   RecoilRoot,
@@ -25,7 +26,11 @@ function Chats() {
   const [activeChatId, setActiveChatId] = useState(null);
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat); // משתנה לשמירת פרטי הצ'אט הנבחר
+  const { chatId, userId } = useParams();
 
+  const handleNavigateToProfile = () => {
+    navigate(`/profile/${userId}`);
+  };
   const handleCreateChatByPhoneNumber = () => {
     const userIdPhoneNumber1 = userDetails.phonNumber;
     const userIdPhoneNumber2 = prompt(
@@ -152,11 +157,13 @@ function Chats() {
     }
     localStorage.setItem("theCurrentChat", JSON.stringify(selectedChat));
   };
-  console.log(user.profileImage);
   return (
     <div className="chats-main">
       <div className="chats-userNameAndImg">
-        <div className="chats-userNameAndImg-img">
+        <div
+          className="chats-userNameAndImg-img"
+          onClick={handleNavigateToProfile}
+        >
           <img src={user.profileImage} alt="User" />
         </div>
         <div className="chats-userNameAndImg-userName">
