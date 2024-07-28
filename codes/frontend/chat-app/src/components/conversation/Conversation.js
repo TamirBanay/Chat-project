@@ -80,6 +80,7 @@ const Conversation = () => {
   }, [messages]);
   const handleBackClick = () => {
     navigate(-1);
+    localStorage.removeItem("theCurrentChat");
   };
   return (
     <div className="conversation-main">
@@ -96,12 +97,12 @@ const Conversation = () => {
           <img
             className="conversation-img"
             src={storedChat?.userId1Details?.profileImage || ""}
-            alt="User 1"
+            alt="User 2"
           />
           <img
             className="conversation-img"
             src={storedChat?.userId2Details?.profileImage || ""}
-            alt="User 2"
+            alt="User 1"
           />
         </div>
       </div>

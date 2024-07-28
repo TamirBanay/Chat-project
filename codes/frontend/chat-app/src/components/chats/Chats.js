@@ -152,6 +152,7 @@ function Chats() {
     }
     localStorage.setItem("theCurrentChat", JSON.stringify(selectedChat));
   };
+  console.log(user.profileImage);
   return (
     <div className="chats-main">
       <div className="chats-userNameAndImg">

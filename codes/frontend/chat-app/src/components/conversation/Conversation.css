@@ -53,15 +53,7 @@ body {
   max-height: 80%;
   overflow-y: scroll;
   margin-top: auto;
-  flex-grow: 1;
-  overflow: auto;
 }
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 .conversation-massage {
   display: flex;
   width: 340px;
