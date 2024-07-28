@@ -51,6 +51,12 @@ const Conversation = () => {
     };
   }, []);
 
+  window.addEventListener("resize", () => {
+    const header = document.querySelector(".fixed-header");
+    const newHeight = window.innerHeight;
+    header.style.height = `${120}px`;
+  });
+
   useEffect(() => {
     socket.emit("joinChat", chatId);
     socket.on("chatHistory", (data) => {
@@ -95,7 +101,6 @@ const Conversation = () => {
     navigate(-1);
     localStorage.removeItem("theCurrentChat");
   };
-
 
   return (
     <div className="conversation-main">
