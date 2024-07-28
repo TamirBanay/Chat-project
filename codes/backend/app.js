@@ -16,6 +16,9 @@ const allowedOrigins = [
   "https://chat-me-app-a252a6ccf758.herokuapp.com",
 ];
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const io = socketIo(server, {
   cors: {
     origin: function (origin, callback) {
