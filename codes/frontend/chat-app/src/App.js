@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
 import "./App.css";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import ChatsPage from "./pages/ChatsPage";
-import ConversationPage from "./pages/ConversationPage";
+import { AuthProvider } from "./context/AuthContext";
+import Login from "./pages/LoginPage";
+import Signup from "./pages/SignupPage";
+import Chats from "./pages/ChatsPage";
 
 function App() {
   const user = localStorage.getItem("user");
@@ -14,18 +13,13 @@ function App() {
       <AuthProvider>
         <HashRouter>
           <Routes>
-            {/* נווט את המשתמש ל-LoginPage אם הוא לא מחובר */}
             <Route
               path="/"
-              element={user ? <ChatsPage /> : <Navigate to="/login" />}
+              element={user ? <Chats /> : <Navigate to="/login" />}
             />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/chats/:userId" element={<ChatsPage />} />
-            <Route
-              path="/chats/:userId/:chatId"
-              element={<ConversationPage />}
-            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/chats/:userId" element={<Chats />} />
           </Routes>
         </HashRouter>
       </AuthProvider>
