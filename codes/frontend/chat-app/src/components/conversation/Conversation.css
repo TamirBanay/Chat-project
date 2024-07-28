@@ -17,6 +17,7 @@ body {
 }
 .fixed-header {
   position: fixed;
+  background-color: #1f232f;
   top: 0;
   left: 0;
   right: 0;
