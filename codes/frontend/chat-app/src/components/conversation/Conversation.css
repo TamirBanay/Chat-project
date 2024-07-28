@@ -18,8 +18,9 @@ body {
 .fixed-header {
   position: fixed;
   top: 0;
-  /* left: 0; */
+  /* left: 0;> */
   /* right: 0; */
+  padding-top: 10px;
   z-index: 1000;
   display: flex;
   flex-direction: row-reverse;
