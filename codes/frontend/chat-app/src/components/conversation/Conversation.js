@@ -99,7 +99,7 @@ const Conversation = () => {
     const header = document.querySelector(
       ".conversation-profileImgs-and-usernames"
     );
-    if (window.innerHeight < 500) {
+    if (window.innerHeight < 100) {
       // השתמש בערך שמייצג את גובה המקלדת
       header.style.bottom = "100px"; // למשל, למקם את ה-header קצת יותר גבוה
     } else {
