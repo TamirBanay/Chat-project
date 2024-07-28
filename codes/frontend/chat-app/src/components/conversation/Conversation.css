@@ -26,6 +26,8 @@ body {
   flex-direction: row-reverse;
   justify-content: space-between;
   width: 340px;
+  box-shadow: 0px 6px 8px 0px rgba(0, 0, 0, 0.05);
+
 }
 
 .conversation-profileImgs-and-usernames {
