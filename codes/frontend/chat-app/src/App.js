@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/LoginPage";
 import Signup from "./pages/SignupPage";
 import Chats from "./pages/ChatsPage";
+import ConversationPage from "./pages/ConversationPage";
 
 function App() {
   const user = localStorage.getItem("user");
@@ -20,6 +21,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/chats/:userId" element={<Chats />} />
+            <Route
+              path="/chats/:userId/:chatId"
+              element={<ConversationPage />}
+            />
           </Routes>
         </HashRouter>
       </AuthProvider>
