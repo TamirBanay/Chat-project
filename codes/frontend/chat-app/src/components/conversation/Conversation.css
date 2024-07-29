@@ -24,11 +24,8 @@ body {
   flex-direction: row-reverse;
   justify-content: space-between;
   width: 340px;
-  box-sizing: border-box; /* חשוב לוודא שהחישוב של הפדינג נעשה נכון */
-
-
+  box-sizing: border-box;
 }
-
 .conversation-profileImgs-and-usernames {
   display: flex;
   flex-direction: row-reverse;
@@ -127,7 +124,7 @@ body {
 
 .conversation-sendIconImg {
   position: absolute;
-  right: 20px;
+  /* right: 20px; */
   bottom: 20%;
   transform: translateX(-100%);
 }

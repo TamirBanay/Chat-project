@@ -40,8 +40,6 @@ body {
   display: flex;
   justify-content: center;
   position: absolute;
-  /* align-items: center; */
-  /* align-content: center; */
   align-items: end;
   /* bottom: 56%; */
   right: 0;
@@ -60,7 +58,6 @@ body {
 .profile-personalDetails {
   display: flex;
   flex-direction: column;
-
   align-self: center;
   margin-top: 70px;
   height: 300px;
