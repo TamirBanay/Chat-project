@@ -44,8 +44,8 @@ body {
 }
 .conversation-back-button {
   display: flex;
-  align-items: center;
-  justify-content: end;
+  /* align-items: center; */
+  /* justify-content: end; */
 }
 .conversation-img {
   width: 40px;

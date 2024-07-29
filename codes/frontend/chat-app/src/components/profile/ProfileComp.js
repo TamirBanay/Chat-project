@@ -1,15 +1,15 @@
 import React from "react";
 import "./Profile.css";
 import arrow from ".././images/arrow-left.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import bell from ".././images/bell.png";
 
 function Profile() {
   const navigate = useNavigate();
-
+  const { chatId, userId } = useParams();
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const handleBackClick = () => {
-    navigate(-1);
+    navigate(`/chats/${userId}`);
   };
 
   return (
