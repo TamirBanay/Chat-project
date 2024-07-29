@@ -106,9 +106,9 @@ const Conversation = () => {
   return (
     <div className="conversation-main">
       <div
-        className={`conversation-profileImgs-and-usernames ${
-          isScrolled ? "fixed-header" : ""
-        }`}
+        className={
+          isScrolled ? "fixed-header" : "conversation-profileImgs-and-usernames"
+        }
       >
         {" "}
         <div className="conversation-back-button" onClick={handleBackClick}>
