@@ -210,7 +210,7 @@ function Chats() {
               </div>
               <div className="chats-chatsList-nameAndText">
                 <div className="chats-chatsList-name">
-                  {capitalizeFirstLetter(chat.userId2Details.username)}
+                  {chat.userId2Details.username}
                 </div>
                 <div className="chats-chatsList-lastText">
                   {chat.messages.length > 0

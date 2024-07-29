@@ -34,6 +34,8 @@ const Conversation = () => {
   const messagesEndRef = useRef(null);
   const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
   const storedChat = JSON.parse(localStorage.getItem("theCurrentChat")) || {};
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(selectedChat.userId2Details.profileImage);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,7 +52,6 @@ const Conversation = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
   window.addEventListener("resize", () => {
     const header = document.querySelector(".fixed-header");
     const newHeight = window.innerHeight;
@@ -120,12 +121,12 @@ const Conversation = () => {
         <div className="conversation-profileImgs-and-usernames-imgs">
           <img
             className="conversation-img"
-            src={storedChat?.userId1Details?.profileImage || ""}
+            src={user.profileImage}
             alt="User 2"
           />
           <img
             className="conversation-img"
-            src={storedChat?.userId2Details?.profileImage || ""}
+            src={selectedChat.userId2Details.profileImage}
             alt="User 1"
           />
         </div>
