@@ -157,7 +157,11 @@ const Conversation = () => {
             ) : (
               <div className="conversation-massage-from-user2">
                 {msg.message.startsWith("data:image") ? (
-                  <img src={msg.message} alt="Image" />
+                  <img
+                    className="conversation-img-send"
+                    src={msg.message}
+                    alt="Image"
+                  />
                 ) : (
                   msg.message
                 )}

@@ -25,7 +25,7 @@ function Camera() {
 
   const startCamera = () => {
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia({ video: { facingMode: "user" } })
       .then((stream) => {
         videoRef.current.srcObject = stream;
       })
@@ -45,10 +45,8 @@ function Camera() {
     );
     const image = canvasRef.current.toDataURL("image/png");
 
-    // Send the image through the socket
     socket.emit("sendMessage", { chatId, message: image, userId });
 
-    // Update the messages state with the new image
     setMessages((prevMessages) => [
       ...prevMessages,
       { userId, message: image },
@@ -72,5 +70,4 @@ function Camera() {
     </div>
   );
 }
-
 export default Camera;
