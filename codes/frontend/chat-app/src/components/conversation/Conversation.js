@@ -204,9 +204,13 @@ const Conversation = () => {
           onChange={handleTextAreaChange}
           rows="1"
         />
-        <button className="conversation-button" onClick={handleSendMessage}>
-          <img className="conversation-sendIconImg" src={sendIcon} />
-        </button>
+        {/* <button className="conversation-button"> */}
+        <img
+          className="conversation-sendIconImg"
+          src={sendIcon}
+          onClick={handleSendMessage}
+        />
+        {/* </button> */}
 
         <div className="custom-file-input">
           <label htmlFor="picture">

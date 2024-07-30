@@ -126,8 +126,8 @@ body {
 
 .conversation-sendIconImg {
   position: absolute;
-  /* right: 20px; */
-  bottom: 20%;
+  right: 20px;
+  /* bottom: 20%; */
   transform: translateX(-100%);
 }
 .conversation-cameraIcons {
@@ -146,7 +146,7 @@ body {
   width: 0px;
   height: 0px;
   border: 0px;
-  background-color: #292f3f;
+  /* background-color: #292f3f; */
 }
 .conversation-img-send {
   width: 180px;
