@@ -112,7 +112,7 @@ body {
   width: fit-content;
   min-height: 40px;
   height: fit-content;
-  border-radius: 12px;
+  border-radius: 10px;
   padding-left: 10px;
   padding-top: 10px;
   background-color: #1f232f;
@@ -126,7 +126,7 @@ body {
 
 .conversation-sendIconImg {
   position: absolute;
-  right: 20px;
+  right: 15px;
   /* bottom: 20%; */
   transform: translateX(-100%);
 }
@@ -142,12 +142,7 @@ body {
   right: 10px;
   transform: translateY(-150%);
 }
-.conversation-button {
-  width: 0px;
-  height: 0px;
-  border: 0px;
-  /* background-color: #292f3f; */
-}
+
 .conversation-img-send {
   width: 180px;
   height: 180px;
