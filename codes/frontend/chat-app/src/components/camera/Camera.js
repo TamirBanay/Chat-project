@@ -54,7 +54,6 @@ function Camera() {
       { userId, message: image },
     ]);
 
-    // Navigate to the chat page
     navigate(`/chats/${userId}/${chatId}`);
   };
 

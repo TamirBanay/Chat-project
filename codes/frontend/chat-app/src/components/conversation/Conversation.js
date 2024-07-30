@@ -101,7 +101,7 @@ const Conversation = () => {
   }, [messages]);
 
   const handleBackClick = () => {
-    navigate(-1);
+    navigate(`/chats/${userId}/`);
     localStorage.removeItem("theCurrentChat");
   };
 
