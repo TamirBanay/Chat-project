@@ -2,19 +2,88 @@
 const Chat = require("../model/chat");
 const User = require("../../users/models/user");
 
+// exports.getChatByUserId = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+//     const chats = await Chat.find({
+//       $or: [{ userId1: userId }, { userId2: userId }],
+//     })
+//       .populate("userId1", "username email profileImage")
+//       .populate("userId2", "username email profileImage");
+
+//     // מצא את פרטי המשתמש של userId2
+//     for (const chat of chats) {
+//       await chat.populate("userId2").execPopulate();
+//     }
+
+//     res.json(chats);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send("Server error");
+//   }
+// };
+
 exports.getChatByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
-    const chats = await Chat.find({
-      $or: [{ userId1: userId }, { userId2: userId }],
-    })
-      .populate("userId1", "username email profileImage")
-      .populate("userId2", "username email profileImage");
+    const userIdNumber = Number(userId); // Ensure userId is a number
 
-    // מצא את פרטי המשתמש של userId2
-    for (const chat of chats) {
-      await chat.populate("userId2").execPopulate();
-    }
+    const chats = await Chat.aggregate([
+      {
+        $match: {
+          $or: [{ userId1: userIdNumber }, { userId2: userIdNumber }],
+        },
+      },
+      {
+        $project: {
+          userId1: 1,
+          userId2: 1,
+          messages: { $slice: ["$messages", -1] }, // Get the last message only
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId1",
+          foreignField: "userid",
+          as: "userId1Details",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId2",
+          foreignField: "userid",
+          as: "userId2Details",
+        },
+      },
+      {
+        $unwind: {
+          path: "$userId1Details",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: "$userId2Details",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          userId1: 1,
+          userId2: 1,
+          messages: 1,
+          "userId1Details.username": 1,
+          "userId1Details.email": 1,
+          "userId1Details.profileImage": 1,
+          "userId2Details.username": 1,
+          "userId2Details.email": 1,
+          "userId2Details.profileImage": 1,
+        },
+      },
+      { $limit: 100 }, // Optional limit for pagination
+    ]).exec();
 
     res.json(chats);
   } catch (err) {
@@ -22,36 +91,6 @@ exports.getChatByUserId = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-exports.getChatByUserId = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const chats = await Chat.find({
-      $or: [{ userId1: userId }, { userId2: userId }],
-    });
-
-    const populatedChats = await Promise.all(
-      chats.map(async (chat) => {
-        const user1 = await User.findOne({ userid: chat.userId1 }).select(
-          "username email profileImage"
-        );
-        const user2 = await User.findOne({ userid: chat.userId2 }).select(
-          "username email profileImage"
-        );
-        return {
-          ...chat.toObject(),
-          userId1Details: user1,
-          userId2Details: user2,
-        };
-      })
-    );
-
-    res.json(populatedChats);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-};
-
 exports.getChats = async (req, res) => {
   try {
     const chats = await Chat.find().populate("userId1 userId2");
