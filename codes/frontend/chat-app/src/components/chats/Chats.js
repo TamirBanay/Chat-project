@@ -76,19 +76,17 @@ function Chats() {
     const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
     if (date.toDateString() === yesterday.toDateString()) {
-      return date.toLocaleDateString("en-US", options);
+      return "Yesterday";
     }
 
     const twoDaysAgo = new Date(now);
     twoDaysAgo.setDate(now.getDate() - 2);
     if (date.toDateString() === twoDaysAgo.toDateString()) {
-      return (
-        date.toLocaleDateString("en-US", options) +
-        ` ${date.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}`
-      );
+      return date.toLocaleDateString("en-US", options);
+      // ` ${date.toLocaleTimeString([], {
+      //   hour: "2-digit",
+      //   minute: "2-digit",
+      // })}`
     }
 
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
