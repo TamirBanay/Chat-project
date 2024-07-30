@@ -150,5 +150,15 @@ body {
   width: 180px;
   height: 180px;
   border-radius: 10px;
-  
+}
+.custom-file-input {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.custom-file-input input[type="file"] {
+  position: absolute;
+
+  opacity: 0;
 }

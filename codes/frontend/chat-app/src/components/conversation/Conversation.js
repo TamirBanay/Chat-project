@@ -34,6 +34,29 @@ const Conversation = () => {
   const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
   const storedChat = JSON.parse(localStorage.getItem("theCurrentChat")) || {};
   const user = JSON.parse(localStorage.getItem("user"));
+
+  const handlePictureChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const image = reader.result;
+
+        // שליחת התמונה בסוקט
+        socket.emit("sendMessage", { chatId, message: image, userId });
+
+        // עדכון ההודעות כדי להוסיף את ההודעה עם התמונה
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { userId, message: image },
+        ]);
+
+        navigate(`/chats/${userId}/${chatId}`);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleNavigateToCameraPage = () => {
     navigate(`/camera/${userId}/${chatId}`);
   };
@@ -184,8 +207,8 @@ const Conversation = () => {
         <button className="conversation-button" onClick={handleSendMessage}>
           <img className="conversation-sendIconImg" src={sendIcon} />
         </button>
-        <div className="conversation-cameraIcons">
-          <img
+        {/* <div className="conversation-cameraIcons"> */}
+        {/* <img
             className="conversation-backgroundIcon"
             src={backgroundIcon}
             alt="Open Camera"
@@ -195,8 +218,31 @@ const Conversation = () => {
             className="conversation-camera"
             src={cameraIcon}
             alt="Take Photo"
+          /> */}
+        <div className="custom-file-input">
+          <label htmlFor="picture">
+            {" "}
+            <img
+              className="conversation-backgroundIcon"
+              src={backgroundIcon}
+              alt="Open Camera"
+            />
+            <img
+              className="conversation-camera"
+              src={cameraIcon}
+              alt="Take Photo"
+            />
+          </label>
+          <input
+            type="file"
+            id="picture"
+            name="picture"
+            accept="image/*"
+            capture="environment"
+            onChange={handlePictureChange}
           />
         </div>
+        {/* </div> */}
       </div>
     </div>
   );
