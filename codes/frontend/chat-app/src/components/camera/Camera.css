@@ -1,0 +1,16 @@
+.camera-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 100% גובה המסך */
+  width: 100vw; /* 100% רוחב המסך */
+  overflow: hidden; /* מונע גלילה נוספת */
+  background-color: black; /* צבע רקע כדי להבדיל את המצלמה */
+}
+
+.camera-video {
+  width: 100%;
+  height: auto; /* מבטיח שהתמונה לא תתעוות */
+  object-fit: cover; /* ממלא את כל השטח מבלי לעוות את התמונה */
+  transform: rotate(90deg); /* מסובב את התמונה כך שתוצג לאורך */
+}

@@ -146,3 +146,9 @@ body {
   border: 0px;
   background-color: #292f3f;
 }
+.conversation-img-send {
+  width: 180px;
+  height: 180px;
+  border-radius: 10px;
+  
+}

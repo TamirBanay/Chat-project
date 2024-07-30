@@ -29,21 +29,17 @@ const Conversation = () => {
   const [user1, setUser1] = useState("");
   const [user2, setUser2] = useState("");
   const { chatId, userId } = useParams();
-  const [stream, setStream] = useState(null);
   const textAreaRef = useRef(null);
   const messagesEndRef = useRef(null);
   const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
   const storedChat = JSON.parse(localStorage.getItem("theCurrentChat")) || {};
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(selectedChat.userId2Details.profileImage);
-
+  const handleNavigateToCameraPage = () => {
+    navigate(`/camera/${userId}/${chatId}`);
+  };
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 0);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -52,11 +48,14 @@ const Conversation = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  window.addEventListener("resize", () => {
+
+  useEffect(() => {
     const header = document.querySelector(".fixed-header");
-    const newHeight = window.innerHeight;
-    header.style.height = `${newHeight}px`;
-  });
+    if (header) {
+      const newHeight = window.innerHeight;
+      header.style.height = `${newHeight}px`;
+    }
+  }, []);
 
   useEffect(() => {
     socket.emit("joinChat", chatId);
@@ -78,7 +77,7 @@ const Conversation = () => {
   }, [chatId]);
 
   const handleSendMessage = () => {
-    const userId = JSON.parse(localStorage.getItem("user")).id;
+    const userId = user.id;
     socket.emit("sendMessage", { chatId, message: newMessage, userId });
     setNewMessage("");
   };
@@ -92,15 +91,24 @@ const Conversation = () => {
     element.style.height = "auto";
     element.style.height = element.scrollHeight + "px";
   };
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
   const handleBackClick = () => {
     navigate(-1);
     localStorage.removeItem("theCurrentChat");
+  };
+
+  // Function to send image data
+  const handleSendImage = (imageData) => {
+    const userId = user.id;
+    socket.emit("sendMessage", { chatId, message: imageData, userId });
   };
 
   return (
@@ -110,7 +118,6 @@ const Conversation = () => {
           isScrolled ? "fixed-header" : "conversation-profileImgs-and-usernames"
         }
       >
-        {" "}
         <div className="conversation-back-button" onClick={handleBackClick}>
           <ArrowForwardIosIcon sx={{ color: "#fff" }} />
         </div>
@@ -137,15 +144,28 @@ const Conversation = () => {
           <div key={index} className="conversation-massage">
             {msg.userId == userId ? (
               <div className="conversation-massage-from-user1">
-                {msg.message}
+                {msg.message.startsWith("data:image") ? (
+                  <img
+                    className="conversation-img-send"
+                    src={msg.message}
+                    alt="Image"
+                  />
+                ) : (
+                  msg.message
+                )}
               </div>
             ) : (
               <div className="conversation-massage-from-user2">
-                {msg.message}
+                {msg.message.startsWith("data:image") ? (
+                  <img src={msg.message} alt="Image" />
+                ) : (
+                  msg.message
+                )}
               </div>
             )}
           </div>
         ))}
+
         <div ref={messagesEndRef} />
       </div>
       <div className="conversation-input-and-cameraIcon">
@@ -167,25 +187,13 @@ const Conversation = () => {
             alt="Open Camera"
           />
           <img
+            onClick={handleNavigateToCameraPage}
             className="conversation-camera"
             src={cameraIcon}
             alt="Take Photo"
           />
         </div>
       </div>
-      <video
-        id="videoElement"
-        width="400"
-        height="300"
-        style={{ display: "none" }}
-        autoPlay
-      ></video>
-      <canvas
-        id="canvasElement"
-        width="400"
-        height="300"
-        style={{ display: "none" }}
-      ></canvas>
     </div>
   );
 };
