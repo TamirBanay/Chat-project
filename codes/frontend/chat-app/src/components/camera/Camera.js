@@ -71,7 +71,7 @@ function Camera() {
 
   return (
     <div className="camera-main">
-      <div>
+      {/* <div>
         <video ref={videoRef} autoPlay className="camera-video"></video>
         <canvas
           ref={canvasRef}
@@ -79,8 +79,28 @@ function Camera() {
           height="480"
           style={{ display: "none" }}
         ></canvas>
-      </div>
-      <button onClick={takePicture}>Take Picture</button>
+      </div> */}
+      <label for="selfie">Take a picture of your face:</label>
+
+      <input
+        type="file"
+        id="selfie"
+        name="selfie"
+        accept="image/*"
+        capture="user"
+      />
+
+      <label for="picture">Take a picture using back facing camera:</label>
+
+      <input
+        type="file"
+        id="picture"
+        name="picture"
+        accept="image/*"
+        capture="environment"
+      />
+
+      {/* <button onClick={takePicture}>Take Picture</button> */}
     </div>
   );
 }
