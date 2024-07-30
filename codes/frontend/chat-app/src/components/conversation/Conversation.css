@@ -154,11 +154,11 @@ body {
 .custom-file-input {
   position: relative;
   overflow: hidden;
+
   display: inline-block;
 }
 
 .custom-file-input input[type="file"] {
   position: absolute;
-
   opacity: 0;
 }

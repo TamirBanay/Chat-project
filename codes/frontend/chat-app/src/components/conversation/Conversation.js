@@ -207,18 +207,7 @@ const Conversation = () => {
         <button className="conversation-button" onClick={handleSendMessage}>
           <img className="conversation-sendIconImg" src={sendIcon} />
         </button>
-        {/* <div className="conversation-cameraIcons"> */}
-        {/* <img
-            className="conversation-backgroundIcon"
-            src={backgroundIcon}
-            alt="Open Camera"
-          />
-          <img
-            onClick={handleNavigateToCameraPage}
-            className="conversation-camera"
-            src={cameraIcon}
-            alt="Take Photo"
-          /> */}
+
         <div className="custom-file-input">
           <label htmlFor="picture">
             {" "}
@@ -242,7 +231,6 @@ const Conversation = () => {
             onChange={handlePictureChange}
           />
         </div>
-        {/* </div> */}
       </div>
     </div>
   );

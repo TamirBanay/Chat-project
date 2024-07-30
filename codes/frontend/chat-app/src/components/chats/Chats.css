@@ -115,18 +115,18 @@ body {
   justify-content: flex-start;
 }
 .chats-chatsList-lastText {
-  width: 161px;
-  height: 15px;
+  max-width: 200px;
+  height: 20px;
   color: white;
   font-family: "Roboto", sans-serif;
   font-weight: 200;
   font-size: 13px;
-
-  width: fit-content;
-
-  color: white;
-  font-family: "Roboto", sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: start;
 }
+
 .chats-chatsList-time {
   display: flex;
   width: fit-content;
