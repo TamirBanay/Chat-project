@@ -15,9 +15,8 @@ import {
   useRecoilValue,
 } from "recoil";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
-import { _theCurrentChat, _allThisChat } from "../../services/atom";
+import { _theCurrentChat } from "../../services/atom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const socket = io(
   process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
@@ -30,26 +29,12 @@ const Conversation = () => {
   const [user1, setUser1] = useState("");
   const [user2, setUser2] = useState("");
   const { chatId, userId } = useParams();
-  const [filteredChats, setFilteredChats] = useState([]);
   const textAreaRef = useRef(null);
   const messagesEndRef = useRef(null);
-  const [selectedChat, setSelectedChat] = useRecoilState(_allThisChat);
+  const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
   const storedChat = JSON.parse(localStorage.getItem("theCurrentChat")) || {};
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const fetchChats = async () => {
-    try {
-      const response = await axios.get(
-        `${
-          process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
-        }/api/chats/getChatByUserId/${user.id}`
-      );
-      setSelectedChat(response.data);
-      setFilteredChats(response.data);
-    } catch (error) {
-      console.error("Error fetching chats:", error.message);
-    }
-  };
   const handlePictureChange = (event) => {
     const file = event.target.files[0];
     if (file) {

@@ -36,6 +36,7 @@ exports.getChatByUserIdLastChat = async (req, res) => {
       },
       {
         $project: {
+          chatId: 1, // הוסף את chatId
           userId1: 1,
           userId2: 1,
           messages: { $slice: ["$messages", -1] }, // Get the last message only
@@ -71,6 +72,7 @@ exports.getChatByUserIdLastChat = async (req, res) => {
       },
       {
         $project: {
+          chatId: 1, // הוסף את chatId
           userId1: 1,
           userId2: 1,
           messages: 1,
