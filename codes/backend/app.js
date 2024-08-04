@@ -16,6 +16,7 @@ const allowedOrigins = [
   "http://localhost:3002",
   "https://tamirbanay.github.io",
   "https://chat-me-app-a252a6ccf758.herokuapp.com",
+  "https://chat-project-b869.onrender.com",
 ];
 
 app.use(express.json());
