@@ -11,6 +11,8 @@ const socketHandler = require("./sockets/socketHandler");
 const app = express();
 const server = http.createServer(app);
 const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
   "http://localhost:3002",
   "https://tamirbanay.github.io",
   "https://chat-me-app-a252a6ccf758.herokuapp.com",
