@@ -24,3 +24,7 @@ export const _theCurrentChat = atom({
   key: "_theCurrentChat",
   default: defaultChatData,
 });
+export const _allThisChat = atom({
+  key: "_allThisChat",
+  default: defaultChatData,
+});

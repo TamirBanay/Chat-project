@@ -19,7 +19,7 @@ import { _theCurrentChat } from "../../services/atom";
 function Chats() {
   const { authData } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [chats, setChats] = useState([]);
+  const [lastChats, setLastChats] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredChats, setFilteredChats] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("user"));
@@ -92,14 +92,14 @@ function Chats() {
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
-  const fetchChats = async () => {
+  const fetchLastChats = async () => {
     try {
       const response = await axios.get(
         `${
           process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
         }/api/chats/getChatByUserId/${userDetails.id}`
       );
-      setChats(response.data);
+      setLastChats(response.data);
       setFilteredChats(response.data);
     } catch (error) {
       console.error("Error fetching chats:", error.message);
@@ -107,10 +107,10 @@ function Chats() {
   };
   useEffect(() => {
     handleSearch();
-  }, [searchQuery, chats]);
+  }, [searchQuery, lastChats]);
 
   const handleSearch = () => {
-    const filtered = chats.filter(
+    const filtered = lastChats.filter(
       (chat) =>
         chat.messages.some((message) =>
           message.message.toLowerCase().includes(searchQuery.toLowerCase())
@@ -127,9 +127,9 @@ function Chats() {
 
   useEffect(() => {
     if (authData?.user) {
-      fetchChats(authData.user.userid);
+      fetchLastChats(authData.user.userid);
     } else if (userDetails) {
-      fetchChats(userDetails.userid);
+      fetchLastChats(userDetails.userid);
     } else {
       navigate("/login");
     }

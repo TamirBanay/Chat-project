@@ -23,6 +23,74 @@ const User = require("../../users/models/user");
 //   }
 // };
 
+exports.getChatByUserIdLastChat = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userIdNumber = Number(userId); // Ensure userId is a number
+
+    const chats = await Chat.aggregate([
+      {
+        $match: {
+          $or: [{ userId1: userIdNumber }, { userId2: userIdNumber }],
+        },
+      },
+      {
+        $project: {
+          userId1: 1,
+          userId2: 1,
+          messages: { $slice: ["$messages", -1] }, // Get the last message only
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId1",
+          foreignField: "userid",
+          as: "userId1Details",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId2",
+          foreignField: "userid",
+          as: "userId2Details",
+        },
+      },
+      {
+        $unwind: {
+          path: "$userId1Details",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: "$userId2Details",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          userId1: 1,
+          userId2: 1,
+          messages: 1,
+          "userId1Details.username": 1,
+          "userId1Details.email": 1,
+          "userId1Details.profileImage": 1,
+          "userId2Details.username": 1,
+          "userId2Details.email": 1,
+          "userId2Details.profileImage": 1,
+        },
+      },
+    ]);
+
+    res.json(chats);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
 exports.getChatByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
