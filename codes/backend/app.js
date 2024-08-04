@@ -19,26 +19,7 @@ const allowedOrigins = [
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const io = socketIo(server, {
-  cors: {
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  },
-});
-
-// Connect to database
-connectDB();
-
+// Middleware CORS for Express
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -56,11 +37,31 @@ app.use(
   })
 );
 
+// Connect to database
+connectDB();
+
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/chats", chatRoutes);
 
-// Setup WebSocket
+// Setup WebSocket with CORS for Socket.IO
+const io = socketIo(server, {
+  cors: {
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  },
+});
+
 socketHandler(io);
 
 module.exports = server;
