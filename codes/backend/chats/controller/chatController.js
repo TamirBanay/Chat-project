@@ -73,11 +73,11 @@ exports.getChatByUserIdLastChat = async (req, res) => {
       },
       {
         $project: {
-          chatId: 1, // Include chatId
+          chatId: 1,
           userId1: 1,
           userId2: 1,
           messages: 1,
-          lastMessageTimestamp: 1, // Include the last message timestamp
+          lastMessageTimestamp: 1, 
           "userId1Details.username": 1,
           "userId1Details.email": 1,
           "userId1Details.profileImage": 1,

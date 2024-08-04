@@ -6,6 +6,7 @@ import appImg from "../images/appImg.png";
 import serchIcon from "../images/searchicon.png";
 import addButton from "../images/addButton.png";
 import Avatar from "../images/Avatar.png";
+import ChatsSkeleton from "../skeleton/ChatsSkeletons";
 
 import axios from "axios";
 import {
@@ -25,9 +26,18 @@ function Chats() {
   const userDetails = JSON.parse(localStorage.getItem("user"));
   const [activeChatId, setActiveChatId] = useState(null);
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
-  const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat); // משתנה לשמירת פרטי הצ'אט הנבחר
+  const [selectedChat, setSelectedChat] = useRecoilState(_theCurrentChat);
   const { chatId, userId } = useParams();
+  const [showChats, setShowChats] = useState(false);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowChats(true);
+    }, 2000); // 2000 מילישניות = 2 שניות
+
+    // נקה את הטיימר אם הרכיב מוסר מה-DOM
+    return () => clearTimeout(timer);
+  }, []);
   const handleNavigateToProfile = () => {
     navigate(`/profile/${userId}`);
   };
@@ -83,10 +93,6 @@ function Chats() {
     twoDaysAgo.setDate(now.getDate() - 2);
     if (date.toDateString() === twoDaysAgo.toDateString()) {
       return date.toLocaleDateString("en-US", options);
-      // ` ${date.toLocaleTimeString([], {
-      //   hour: "2-digit",
-      //   minute: "2-digit",
-      // })}`
     }
 
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
@@ -190,38 +196,46 @@ function Chats() {
       </div>
       <div className="chats-titleChatrooms">Chatrooms</div>
       <div className="chats-storyImages"></div>
-      <div className="chats-chatsList-main">
-        {filteredChats
-          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-          .map((chat) => (
-            <div
-              key={chat._id}
-              className="chats-chatsList"
-              onClick={() => handleChatClick(chat.chatId)}
-            >
-              <div className="chats-chatsList-img">
-                <img
-                  className="chats-chatsList-img-img"
-                  src={chat.userId2Details.profileImage}
-                  alt="Avatar"
-                />
-              </div>
-              <div className="chats-chatsList-nameAndText">
-                <div className="chats-chatsList-name">
-                  {chat.userId2Details.username}
+      {showChats ? (
+        <div className="chats-chatsList-main">
+          {filteredChats
+            .sort(
+              (a, b) =>
+                new Date(b.lastMessageTimestamp) -
+                new Date(a.lastMessageTimestamp)
+            )
+            .map((chat) => (
+              <div
+                key={chat._id}
+                className="chats-chatsList"
+                onClick={() => handleChatClick(chat.chatId)}
+              >
+                <div className="chats-chatsList-img">
+                  <img
+                    className="chats-chatsList-img-img"
+                    src={chat.userId2Details.profileImage}
+                    alt="Avatar"
+                  />
                 </div>
-                <div className="chats-chatsList-lastText">
-                  {chat.messages.length > 0
-                    ? chat.messages[chat.messages.length - 1].message
-                    : ""}
+                <div className="chats-chatsList-nameAndText">
+                  <div className="chats-chatsList-name">
+                    {chat.userId2Details.username}
+                  </div>
+                  <div className="chats-chatsList-lastText">
+                    {chat.messages.length > 0
+                      ? chat.messages[chat.messages.length - 1].message
+                      : ""}
+                  </div>
+                </div>
+                <div className="chats-chatsList-time">
+                  {formatDate(chat.lastMessageTimestamp)}
                 </div>
               </div>
-              <div className="chats-chatsList-time">
-                {formatDate(chat.timestamp)}
-              </div>
-            </div>
-          ))}
-      </div>
+            ))}
+        </div>
+      ) : (
+        <ChatsSkeleton filteredChats={filteredChats} />
+      )}
     </div>
   );
 }
