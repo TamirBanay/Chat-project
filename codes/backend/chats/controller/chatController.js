@@ -36,10 +36,11 @@ exports.getChatByUserIdLastChat = async (req, res) => {
       },
       {
         $project: {
-          chatId: 1, // הוסף את chatId
+          chatId: 1, // Include chatId
           userId1: 1,
           userId2: 1,
           messages: { $slice: ["$messages", -1] }, // Get the last message only
+          lastMessageTimestamp: { $arrayElemAt: ["$messages.timestamp", -1] }, // Get the timestamp of the last message
         },
       },
       {
@@ -72,10 +73,11 @@ exports.getChatByUserIdLastChat = async (req, res) => {
       },
       {
         $project: {
-          chatId: 1, // הוסף את chatId
+          chatId: 1, // Include chatId
           userId1: 1,
           userId2: 1,
           messages: 1,
+          lastMessageTimestamp: 1, // Include the last message timestamp
           "userId1Details.username": 1,
           "userId1Details.email": 1,
           "userId1Details.profileImage": 1,
