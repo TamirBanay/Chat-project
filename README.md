@@ -1,5 +1,5 @@
 
-# Chat Mee Project
+# Chat Me Project
 
 This project is a chat application developed for my portfolio. The application allows users to create chat rooms, send messages, and interact with each other in real-time. It features user authentication, message storage, and a responsive design.
 
