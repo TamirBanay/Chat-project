@@ -15,13 +15,14 @@ import {
   useRecoilValue,
 } from "recoil";
 import { useNavigate } from "react-router-dom";
-
+import ConversationSkeleton from "../skeleton/ConversationSkelaton";
 import { _theCurrentChat } from "../../services/atom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const socket = io(
   process.env.REACT_APP_API_BASE_URL || "http://localhost:4000"
 );
 const Conversation = () => {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -57,9 +58,6 @@ const Conversation = () => {
     }
   };
 
-  const handleNavigateToCameraPage = () => {
-    navigate(`/camera/${userId}/${chatId}`);
-  };
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
@@ -79,7 +77,6 @@ const Conversation = () => {
       header.style.height = `${newHeight}px`;
     }
   }, []);
-
   useEffect(() => {
     socket.emit("joinChat", chatId);
     socket.on("chatHistory", (data) => {
@@ -133,6 +130,18 @@ const Conversation = () => {
     const userId = user.id;
     socket.emit("sendMessage", { chatId, message: imageData, userId });
   };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 7000);
+
+    return () => clearTimeout(timer);
+  }, []);
+  useEffect(() => {
+    if (!loading) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [loading, messages]);
 
   return (
     <div className="conversation-main">
@@ -161,40 +170,46 @@ const Conversation = () => {
           />
         </div>
       </div>
-      <div className="conversation-all-massage-container">
-        <br />
-        {messages.map((msg, index) => (
-          <div key={index} className="conversation-massage">
-            {msg.userId == userId ? (
-              <div className="conversation-massage-from-user1">
-                {msg.message.startsWith("data:image") ? (
-                  <img
-                    className="conversation-img-send"
-                    src={msg.message}
-                    alt="Image"
-                  />
-                ) : (
-                  msg.message
-                )}
-              </div>
-            ) : (
-              <div className="conversation-massage-from-user2">
-                {msg.message.startsWith("data:image") ? (
-                  <img
-                    className="conversation-img-send"
-                    src={msg.message}
-                    alt="Image"
-                  />
-                ) : (
-                  msg.message
-                )}
-              </div>
-            )}
-          </div>
-        ))}
+      {loading ? (
+        <ConversationSkeleton />
+      ) : (
+        <div className="conversation-all-massage-container">
+          <br />
 
-        <div ref={messagesEndRef} />
-      </div>
+          {messages.map((msg, index) => (
+            <div key={index} className="conversation-massage">
+              {msg.userId == userId ? (
+                <div className="conversation-massage-from-user1">
+                  {msg.message.startsWith("data:image") ? (
+                    <img
+                      className="conversation-img-send"
+                      src={msg.message}
+                      alt="Image"
+                    />
+                  ) : (
+                    msg.message
+                  )}
+                </div>
+              ) : (
+                <div className="conversation-massage-from-user2">
+                  {msg.message.startsWith("data:image") ? (
+                    <img
+                      className="conversation-img-send"
+                      src={msg.message}
+                      alt="Image"
+                    />
+                  ) : (
+                    msg.message
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+
+          <div ref={messagesEndRef} />
+        </div>
+      )}
+
       <div className="conversation-input-and-cameraIcon">
         <textarea
           ref={textAreaRef}
