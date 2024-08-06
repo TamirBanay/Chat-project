@@ -51,11 +51,11 @@ Make sure you have the following installed:
 
 # Running the Project
 
-   cd backend 
-   node index.js
+    cd backend 
+    node index.js
 
-   cd frontend/chat-app
-   npm start
+    cd frontend/chat-app
+    npm start
 
 # How to Use
 
