@@ -46,16 +46,16 @@ Make sure you have the following installed:
     npm install
 
 # Install frontend dependencies
-    cd ../frontend
+    cd ../frontend/chat-app
     npm install
 
 # Running the Project
 
-cd backend 
-node index.js
+   cd backend 
+   node index.js
 
-cd frontend/chat-app
-npm start
+   cd frontend/chat-app
+   npm start
 
 # How to Use
 
